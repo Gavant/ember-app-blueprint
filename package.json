@@ -1,0 +1,26 @@
+{
+    "name": "@gavant/ember-app-blueprint",
+    "version": "3.16.0",
+    "description": "Ember CLI blueprint for initializing a new Gavant Ember.js application.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://repo.gavant.com/gavant/ember-app-skeleton.git"
+    },
+    "keywords": [
+        "ember-blueprint",
+        "ember-addon"
+    ],
+    "author": "Gavant Software, Inc.",
+    "homepage": "https://repo.gavant.com/gavant/ember-app-skeleton",
+    "dependencies": {
+        "chalk": "^3.0.0",
+        "ember-cli-string-utils": "^1.1.0"
+    },
+    "ember-addon": {
+        "main": "ember-addon-main.js"
+    }
+}
