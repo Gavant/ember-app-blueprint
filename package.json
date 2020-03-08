@@ -8,14 +8,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://repo.gavant.com/gavant/ember-app-skeleton.git"
+        "url": "git+https://github.com/Gavant/ember-app-blueprint.git"
     },
     "keywords": [
         "ember-blueprint",
         "ember-addon"
     ],
     "author": "Gavant Software, Inc.",
-    "homepage": "https://repo.gavant.com/gavant/ember-app-skeleton",
+    "homepage": "https://github.com/Gavant/ember-app-blueprint",
     "dependencies": {
         "chalk": "^3.0.0",
         "ember-cli-string-utils": "^1.1.0"
