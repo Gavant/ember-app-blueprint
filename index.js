@@ -40,7 +40,7 @@ module.exports = {
         const projRoot = this.project.root;
 
         //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
-        await mv(path.join(projRoot, 'gitignore'), path.join(projRoot, '.gitignore'));
+        await mv(path.join(projRoot, '__git_ignore__'), path.join(projRoot, '.gitignore'));
 
         //move the .env-* files into the ember app's parent directory (i.e. the repo root dir)
         await mv(path.join(projRoot, '.env-development'), path.join(projRoot, '..', '.env-development'));
