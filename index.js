@@ -37,8 +37,12 @@ module.exports = {
     async afterInstall() {
         await this._super.afterInstall.apply(this, arguments);
 
-        //move the .env-* files into the ember app's parent directory (i.e. the repo root dir)
         const projRoot = this.project.root;
+
+        //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
+        await mv(path.join(projRoot, 'gitignore'), path.join(projRoot, '.gitignore'));
+
+        //move the .env-* files into the ember app's parent directory (i.e. the repo root dir)
         await mv(path.join(projRoot, '.env-development'), path.join(projRoot, '..', '.env-development'));
         await mv(path.join(projRoot, '.env-candidate'), path.join(projRoot, '..', '.env-candidate'));
         await mv(path.join(projRoot, '.env-production'), path.join(projRoot, '..', '.env-production'));
