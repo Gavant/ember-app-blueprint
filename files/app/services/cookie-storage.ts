@@ -53,14 +53,21 @@ export default class CookieStorage {
     }
 
     /**
-     * Does nothing, as we don't want to give it the ability to clear ALL cookies
-     * as other systems use cookies as well, such as ember-simple-auth
+     * Clear all cognito-related cookies
      *
      * @static
      * @memberof CookieStorage
      * @returns void
      */
     static clear(): void {
-        //no-op
+        const cookieRegex = /^CognitoIdentityServiceProvider/;
+        const cookies = this.cookies.read();
+        if (cookies) {
+            Object.keys(cookies).forEach((key) => {
+                if (cookieRegex.test(key)) {
+                    this.removeItem(key);
+                }
+            });
+        }
     }
 }
