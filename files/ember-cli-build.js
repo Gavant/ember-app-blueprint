@@ -36,5 +36,8 @@ module.exports = function(defaults) {
     //COGNITO: required for Amplify to work correctly in server environments
     app.import('vendor/shims/window-global.js');
 
+    //@see https://github.com/jasonmit/ember-cli-moment-shim/issues/165
+    app.import('node_modules/moment/moment.js', { using: [{ transformation: 'amd', as: 'moment' }] });
+
     return app.toTree();
 };
