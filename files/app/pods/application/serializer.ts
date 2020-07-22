@@ -1,17 +1,22 @@
 import DS from 'ember-data';
 import { isArray } from '@ember/array';
-
-// [PRO-TIP!] Do you need to save models along with changes to their relationships?
-//
-// JSON-API does not support this (currently) out-of-the-box, however, we may
-// be able to use the `ember-data-save-relationships` addon to accomplish that.
-// Alternatively, we can just follow a simpler (but less efficient/more brittle)
-// solution of performing multiple consecutive API requests.
-//
-// @see https://github.com/psteininger/ember-data-save-relationships
-// @see https://emberigniter.com/saving-models-relationships-json-api/
+import { camelize } from '@ember/string';
+import ModelRegistry from 'ember-data/types/registries/model';
 
 export default class ApplicationSerializer extends DS.JSONAPISerializer {
+    keyForAttribute(key: string) {
+        return key;
+    }
+
+    keyForRelationship(key: string) {
+        return key;
+    }
+
+    payloadKeyFromModelName<K extends keyof ModelRegistry>(modelName: K) {
+        const key = super.payloadKeyFromModelName(modelName);
+        return camelize(key);
+    }
+
     /**
      * Do not serialize attributes if the record is being updated and the attribute
      * value was not modified. Also never serialize attributes that have been
@@ -23,12 +28,42 @@ export default class ApplicationSerializer extends DS.JSONAPISerializer {
      * @param attribute {Object}
      * @see https://github.com/emberjs/data/issues/3467#issuecomment-543176123
      */
-    serializeAttribute(snapshot: DS.Snapshot<string | number>, json: {}, key: string, attribute: {}) {
+    serializeAttribute(
+        snapshot: DS.Snapshot<string | number>,
+        json: { attributes: Object | null },
+        key: string,
+        attribute: {}
+    ) {
         if (
-            (snapshot.record.get('isNew') || snapshot.changedAttributes()[key]) &&
-            (!isArray(snapshot.record.unsendableAttributes) || snapshot.record.unsendableAttributes.indexOf(key) === -1)
+            snapshot.record.get('isNew') ||
+            snapshot.changedAttributes()[key] ||
+            (isArray(snapshot.record.alwaysSentAttributes) &&
+                snapshot.record.alwaysSentAttributes.indexOf(key) !== -1 &&
+                (!isArray(snapshot.record.unsendableAttributes) ||
+                    snapshot.record.unsendableAttributes.indexOf(key) === -1))
         ) {
             super.serializeAttribute(snapshot, json, key, attribute);
+        }
+    }
+
+    /**
+     * Append an `attributes: {}` to the request json
+     * if `attributes` aren't present
+     *
+     * @param {{ data: { attributes: Object } }} json
+     * @param {ModelRegistry} type
+     * @param {(DS.Snapshot<string | number>)} snapshot
+     * @param {Object} options
+     */
+    serializeIntoHash(
+        json: { data: { attributes: Object } },
+        type: ModelRegistry,
+        snapshot: DS.Snapshot<string | number>,
+        options: Object
+    ) {
+        super.serializeIntoHash(json, type, snapshot, options);
+        if (!json.data.attributes) {
+            json.data.attributes = {};
         }
     }
 }

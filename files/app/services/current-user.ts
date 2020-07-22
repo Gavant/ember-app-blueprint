@@ -37,8 +37,8 @@ export default class CurrentUserService extends Service {
      * @returns Promise<User>
      */
     async fetchUser(): Promise<User> {
-        const result = await this.store.query('user', { me: true });
-        const user = get(result, 'firstObject') as User;
+        const userArray = await this.store.query('user', { filter: { me: true } });
+        const user = get(userArray, 'firstObject') as User;
         // TODO can we improve this at all so we dont need to ts-ignore it?
         // @ts-ignore allow setting a non-standard property `user` on the session service instance
         set(this.session, 'user', user);

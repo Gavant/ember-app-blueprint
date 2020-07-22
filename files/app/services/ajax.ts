@@ -1,5 +1,4 @@
 import ENV from '<%= modulePrefix %>/config/environment';
-import CognitoService from '<%= modulePrefix %>/services/cognito';
 import { computed, setProperties } from '@ember/object';
 import { assign } from '@ember/polyfills';
 import Service, { inject as service } from '@ember/service';
@@ -9,18 +8,17 @@ import { reject } from 'rsvp';
 
 export default class AjaxService extends Service {
     @service session!: SessionService;
-    @service cognito!: CognitoService;
 
     /**
      * Add the oauth token authorization header to all requests
      * @return {Object}
      */
-    @computed('session.{isAuthenticated,data.authenticated.access_token}')
+    @computed('session.{isAuthenticated,data.authenticated.id_token}')
     get authorizationHeaders() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
-            const { access_token } = this.session.data!.authenticated;
-            headers['Authorization'] = `Bearer ${access_token}`;
+            const { id_token } = this.session.data!.authenticated;
+            headers['Authorization'] = `Bearer ${id_token}`;
         }
         return headers;
     }
@@ -46,15 +44,13 @@ export default class AjaxService extends Service {
      * @return {Promise}
      */
     async request(url: string, options: RequestInit = {}) {
-        await this.cognito.refreshSessionIfNeeded();
-
         setProperties(options, {
-            credentials: 'include',
-            headers: this.headers
+            // credentials: 'include',
+            headers: { ...this.headers, ...(options.headers || {}) }
         });
 
-        const response = await fetch(`${ENV.apiBaseUrl}/${url.replace(/^\//, '')}`, options);
-        const responseHeaders = this.parseHeaders(response.headers);
+        const baseUrl = /^https?\:\/\//.test(url) ? '' : `${ENV.apiBaseUrl}/`;
+        const response = await fetch(`${baseUrl}${url.replace(/^\//, '')}`, options);
         const result = await this.handleResponse(response.status, responseHeaders, response);
         if (this.isSuccess(response.status)) {
             const isNoContent = this.normalizeStatus(response.status) === 204;

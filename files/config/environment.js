@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
     let ENV = {
         modulePrefix: '<%= modulePrefix %>',
         podModulePrefix: '<%= modulePrefix %>/pods',
@@ -57,20 +57,7 @@ module.exports = function(environment) {
         },
 
         //deployment environment-specific variables
-        apiBaseUrl: process.env.API_BASE_URL,
-        cognito: {
-            userPoolWebClientId: process.env.COGNITO_POOL_CLIENT_ID,
-            userPoolId: process.env.COGNITO_POOL_ID,
-            region: process.env.COGNITO_REGION,
-            cookieStorage: {
-                //TODO we could probably eventually set these cookie configs dynamically
-                //using `window.location` in the browser, and `fastboot.request` in fastboot
-                domain: process.env.COGNITO_COOKIE_DOMAIN,
-                path: process.env.COGNITO_COOKIE_PATH,
-                expires: 365,
-                secure: false
-            }
-        }
+        apiBaseUrl: process.env.API_BASE_URL
     };
 
     if (environment === 'development') {
@@ -101,9 +88,6 @@ module.exports = function(environment) {
         ENV['ember-error-tracker'].consumers.api = {
             endPoint: `${process.env.API_BASE_URL}/${process.env.API_ERRORS_ENDPOINT}`
         };
-
-        //candidate/prod should ALWAYS be on https, so hard-code that
-        ENV.cognito.cookieStorage.secure = true;
     }
 
     return ENV;

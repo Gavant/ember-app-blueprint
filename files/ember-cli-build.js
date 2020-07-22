@@ -2,7 +2,7 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function(defaults) {
+module.exports = function (defaults) {
     let app = new EmberApp(defaults, {
         fingerprint: {
             prepend: process.env.ASSETS_BASE_URL
@@ -32,9 +32,6 @@ module.exports = function(defaults) {
     // modules that you would like to import into your application
     // please specify an object with the list of modules as keys
     // along with the exports of each module as its value.
-
-    //COGNITO: required for Amplify to work correctly in server environments
-    app.import('vendor/shims/window-global.js');
 
     //@see https://github.com/jasonmit/ember-cli-moment-shim/issues/165
     app.import('node_modules/moment/moment.js', { using: [{ transformation: 'amd', as: 'moment' }] });
