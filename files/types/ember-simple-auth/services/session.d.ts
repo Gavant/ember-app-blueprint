@@ -2,6 +2,7 @@ declare module 'ember-simple-auth/services/session' {
     import Service from '@ember/service';
     import Evented from '@ember/object/evented';
     import RSVP from 'rsvp';
+    import User from '<%= modulePrefix %>/pods/user/model';
 
     interface SessionAuthenticatedData {
         id: string;
@@ -51,6 +52,7 @@ declare module 'ember-simple-auth/services/session' {
         store: any;
         attemptedTransition: any;
         session: any;
+        user: User;
 
         set<K extends keyof this>(key: K, value: this[K]): this[K];
         authenticate(...args: any[]): RSVP.Promise<{}>;
