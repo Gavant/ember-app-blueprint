@@ -1,13 +1,20 @@
-interface Data {
-    authenticated: {
-        id: string;
-        access_token: string;
-    };
-}
 declare module 'ember-simple-auth/services/session' {
     import Service from '@ember/service';
     import Evented from '@ember/object/evented';
     import RSVP from 'rsvp';
+    import User from '<%= modulePrefix %>/pods/user/model';
+
+    interface SessionAuthenticatedData {
+        id: string;
+        id_token: string;
+        refresh_token: string;
+        expires_in: number;
+        expires_at: number;
+    }
+
+    interface SessionData {
+        authenticated: SessionAuthenticatedData;
+    }
 
     export default class session extends Service.extend(Evented) {
         /**
@@ -41,10 +48,11 @@ declare module 'ember-simple-auth/services/session' {
          */
 
         isAuthenticated: boolean;
-        data: Data | null;
+        data: SessionData | null;
         store: any;
         attemptedTransition: any;
         session: any;
+        user: User;
 
         set<K extends keyof this>(key: K, value: this[K]): this[K];
         authenticate(...args: any[]): RSVP.Promise<{}>;

@@ -1,5 +1,4 @@
 import ENV from '<%= modulePrefix %>/config/environment';
-import CognitoService from '<%= modulePrefix %>/services/cognito';
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
@@ -9,15 +8,22 @@ import { reject } from 'rsvp';
 import FastbootAdapter from 'ember-data-storefront/mixins/fastboot-adapter';
 import FastbootService from 'ember-cli-fastboot/services/fastboot';
 
+export interface ApiServerError {
+    code: string;
+    detail?: string;
+    meta: {
+        entity?: string;
+    };
+}
+
+export interface ApiServerErrorResponse {
+    errors: ApiServerError[];
+}
+
 //@ts-ignore TODO we need to figure out how to allow DS.JSONAPIAdapter with custom properties correctly
 export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMixin, FastbootAdapter) {
     @service session!: SessionService;
     @service fastboot!: FastbootService;
-    /**
-     * REMOVE THIS IF THE PROJECT DOES NOT USE AUTH/COGNITO
-     * (NOTE: delete this comment in the project version)
-     */
-    @service cognito!: CognitoService;
 
     host = ENV.apiBaseUrl;
 
@@ -28,28 +34,11 @@ export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMix
     get headers() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
-            const { access_token } = this.session.data!.authenticated;
-            headers['Authorization'] = `Bearer ${access_token}`;
+            const { id_token } = this.session.data!.authenticated;
+            headers['Authorization'] = `Bearer ${id_token}`;
         }
 
         return headers;
-    }
-
-    /**
-     * REMOVE THIS IF THE PROJECT DOES NOT USE AUTH/COGNITO
-     * (NOTE: delete this comment in the project version)
-     */
-    /**
-     * Before ajax network requests are made to the API, check and make sure the
-     * cognito user session is valid, and if not, refresh it.
-     * @param {String} url
-     * @param {String} type
-     * @param {Object} options
-     * @returns Promise
-     */
-    async ajax(url: string, type: string, options: {}) {
-        await this.cognito.refreshSessionIfNeeded();
-        return super.ajax(url, type, options);
     }
 
     /**

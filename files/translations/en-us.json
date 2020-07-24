@@ -13,21 +13,17 @@
         "goBack": "Go back"
     },
     "serverErrors": {
-        "heading": "The following {count, plural, =1 {error} other {errors}} occurred while attempting to process your request.",
-        "NotAuthorizedException": "Invalid username or password.",
-        "LimitExceededException": "You have exceeded the maximum number of attempts. Please try again in a little while.",
-        "TooManyRequestsException": "You have exceeded the maximum number of attempts. Please try again in a little while.",
-        "TooManyFailedAttemptsException": "Too many failed attempts. Please try again in a little while.",
-        "InvalidParameterException": "The entered password is not valid. Please make sure it meets all requirements and try again.",
-        "InvalidPasswordException": "The entered password is not valid. Please make sure it meets all requirements and try again.",
-        "CodeMismatchException": "The provided code is not valid.",
-        "ExpiredCodeException": "The provided code has expired.",
-        "UserNotFoundException": "The provided user could not be found.",
-        "UserNotConfirmedException": "The provided user is not confirmed.",
-        "undefined": "Sorry, an unexpected error has occurred.",
         "unknown": {
             "unexpected": "Sorry, an unexpected error has occurred."
-        }
+        },
+        "cognito": {
+            "NotAuthorizedException": "Incorrect username or password.",
+            "InvalidPasswordException": "The entered password is not valid. Please make sure it meets all requirements and try again.",
+            "CodeMismatchException": "The provided verification code is invalid or expired.",
+            "ExpiredCodeException": "The provided verification code is expired."
+        },
+        "heading": "The following {count, plural, =1 {error} other {errors}} occurred while attempting to process your request.",
+        "undefined": "Sorry, an unexpected error has occurred."
     },
     "login": {
         "title": "Login"
