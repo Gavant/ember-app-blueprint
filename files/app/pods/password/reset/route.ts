@@ -25,9 +25,9 @@ export default class PasswordReset extends Route {
 
     resetController(controller: PasswordResetController, isExiting: boolean, transition: any) {
         super.resetController(controller, isExiting, transition);
-        if (isExiting) {
-            controller.code = '';
-            controller.email = '';
-        }
+        // if (isExiting) {
+        //     controller.code = '';
+        //     controller.email = '';
+        // }
     }
 }

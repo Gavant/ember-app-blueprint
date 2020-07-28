@@ -51,6 +51,7 @@ export default class AjaxService extends Service {
 
         const baseUrl = /^https?\:\/\//.test(url) ? '' : `${ENV.apiBaseUrl}/`;
         const response = await fetch(`${baseUrl}${url.replace(/^\//, '')}`, options);
+        const responseHeaders = this.parseHeaders(response.headers);
         const result = await this.handleResponse(response.status, responseHeaders, response);
         if (this.isSuccess(response.status)) {
             const isNoContent = this.normalizeStatus(response.status) === 204;

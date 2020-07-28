@@ -48,6 +48,7 @@ declare module 'ember-simple-auth/services/session' {
          */
 
         isAuthenticated: boolean;
+        isAuthenticating: boolean;
         data: SessionData | null;
         store: any;
         attemptedTransition: any;

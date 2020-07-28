@@ -23,8 +23,8 @@ export default class PasswordForgot extends Route {
      */
     resetController(controller: PasswordForgotController, isExiting: boolean, transition: any) {
         super.resetController(controller, isExiting, transition);
-        if (isExiting) {
-            controller.submitSuccess = false;
-        }
+        // if (isExiting) {
+        //     controller.submitSuccess = false;
+        // }
     }
 }

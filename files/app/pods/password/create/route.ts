@@ -29,10 +29,10 @@ export default class PasswordCreate extends Route {
      */
     afterModel(model: object, transition: Transition) {
         super.afterModel(model, transition);
-        const controller = this.controllerFor('password.create') as PasswordCreateController;
-        if (!controller.username || !controller.password) {
-            this.transitionTo('login');
-        }
+        // const controller = this.controllerFor('password.create') as PasswordCreateController;
+        // if (!controller.username || !controller.password) {
+        //     this.transitionTo('login');
+        // }
     }
 
     /**
@@ -44,7 +44,7 @@ export default class PasswordCreate extends Route {
      */
     resetController(controller: PasswordCreateController, isExiting: boolean, transition: any) {
         super.resetController(controller, isExiting, transition);
-        controller.username = '';
-        controller.password = '';
+        // controller.username = '';
+        // controller.password = '';
     }
 }
