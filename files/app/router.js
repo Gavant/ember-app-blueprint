@@ -1,6 +1,5 @@
 import EmberRouter from '@ember/routing/router';
-
-import config from './config/environment';
+import config from '<%= modulePrefix %>/config/environment';
 
 export default class Router extends EmberRouter {
     location = config.locationType;
@@ -10,6 +9,11 @@ export default class Router extends EmberRouter {
 
 Router.map(function() {
     this.route('login');
+    this.route('password', function() {
+        this.route('forgot');
+        this.route('reset');
+        this.route('create');
+    });
 
     //make sure these routes are always defined last!
     this.route('five-hundred', { path: '/500' });
