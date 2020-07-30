@@ -4,7 +4,6 @@ import DS from 'ember-data';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import SessionService from 'ember-simple-auth/services/session';
 import { reject } from 'rsvp';
-//@ts-ignore TODO create types for this
 import FastbootAdapter from 'ember-data-storefront/mixins/fastboot-adapter';
 import FastbootService from 'ember-cli-fastboot/services/fastboot';
 
