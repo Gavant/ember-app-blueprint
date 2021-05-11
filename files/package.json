@@ -32,10 +32,12 @@
     },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",
+        "@ember/render-modifiers": "^1.0.2",
         "@ember/test-helpers": "^2.2.0",
         "@fortawesome/ember-fontawesome": "^0.2.1",
         "@fortawesome/free-solid-svg-icons": "^5.12.1",
         "@gavant/ember-template-lint-forms": "^0.0.2",
+        "@gavant/glint-template-types": "^0.0.15",
         "@glimmer/component": "^1.0.3",
         "@glimmer/tracking": "^1.0.3",
         "@types/ember": "^3.1.1",
@@ -62,6 +64,8 @@
         "@types/ember__utils": "^3.16.2",
         "@types/htmlbars-inline-precompile": "^1.0.1",
         "@types/qunit": "^2.11.1",
+        "@typescript-eslint/eslint-plugin": "^4.22.1",
+        "@typescript-eslint/parser": "^4.22.1",
         "babel-eslint": "^10.1.0",
         "bootstrap": "^4.6.0",
         "broccoli-asset-rev": "^3.0.0",
@@ -108,7 +112,7 @@
         "eslint-plugin-prettier": "^3.3.1",
         "loader.js": "^4.7.0",
         "npm-run-all": "^4.1.5",
-        "prettier": "^2.2.1",
+        "prettier": "^2.3.0",
         "qunit": "^2.14.0",
         "qunit-dom": "^1.6.0",
         "sass": "^1.32.8",
@@ -123,5 +127,8 @@
     "fastbootDependencies": [
         "node-fetch",
         "moment"
-    ]
+    ],
+    "volta": {
+        "node": "12.19.0"
+    }
 }
