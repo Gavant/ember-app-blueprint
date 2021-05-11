@@ -40,6 +40,8 @@
         "@gavant/glint-template-types": "^0.0.15",
         "@glimmer/component": "^1.0.3",
         "@glimmer/tracking": "^1.0.3",
+        "@glint/core": "^0.5.1",
+        "@glint/environment-ember-loose": "^0.5.1",
         "@types/ember": "^3.1.1",
         "@types/rsvp": "^4.0.3",
         "@types/ember-data": "^3.16.10",
