@@ -1,6 +1,6 @@
 {
     "name": "@gavant/ember-app-blueprint",
-    "version": "3.25.1",
+    "version": "3.25.2",
     "description": "Ember CLI blueprint for initializing a new Gavant Ember.js application.",
     "main": "index.js",
     "scripts": {
