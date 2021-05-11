@@ -6,17 +6,6 @@ module.exports = function (defaults) {
     let app = new EmberApp(defaults, {
         fingerprint: {
             prepend: process.env.ASSETS_BASE_URL
-        },
-        autoprefixer: {
-            browsers: [
-                'Chrome >= 60',
-                'Firefox >= 60',
-                'Edge >= 12',
-                'Explorer >= 11',
-                'iOS >= 10',
-                'Safari >= 10',
-                'Android >= 6'
-            ]
         }
     });
 
