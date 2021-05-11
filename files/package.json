@@ -32,10 +32,12 @@
     },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",
+        "@ember/render-modifiers": "^1.0.2",
         "@ember/test-helpers": "^2.2.0",
         "@fortawesome/ember-fontawesome": "^0.2.1",
         "@fortawesome/free-solid-svg-icons": "^5.12.1",
         "@gavant/ember-template-lint-forms": "^0.0.2",
+        "@gavant/glint-template-types": "^0.0.15",
         "@glimmer/component": "^1.0.3",
         "@glimmer/tracking": "^1.0.3",
         "@types/ember": "^3.1.1",
