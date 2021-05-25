@@ -1,5 +1,5 @@
-import Service from '@ember/service';
 import Evented from '@ember/object/evented';
+import Service from '@ember/service';
 
 interface Data {
     authenticated: {
@@ -17,11 +17,11 @@ declare module 'ember-intl/services/intl' {
         formatTime(name: string): any;
         formatDate(name: string): any;
 
-        init(): VoidFunction;
-        willDestroy(): VoidFunction;
+        init(): () => void;
+        willDestroy(): () => void;
 
-        lookup(key: string, localeName: string, options: object): object;
-        t(key: string, options?: object): string;
-        setLocale(name: string): VoidFunction;
+        lookup(key: string, localeName: string, options: Record<string, unknown>): Record<string, unknown>;
+        t(key: string, options?: Record<string, unknown>): string;
+        setLocale(name: string): () => void;
     }
 }

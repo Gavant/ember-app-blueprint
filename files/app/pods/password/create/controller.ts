@@ -1,18 +1,19 @@
 // REMOVE COMMENTS TO USE WITH EMBER-VALIDATIONS/CHANGESET ADDONS
 import Controller from '@ember/controller';
+
 // import { action } from '@ember/object';
 // import { inject as service } from '@ember/service';
 // import { BufferedChangeset } from 'ember-changeset/types';
 // import IntlService from 'ember-intl/services/intl';
 // import SessionService from 'ember-simple-auth/services/session';
-// import Notifications from '<%= modulePrefix %>/services/notifications';
+// import Notification from '<%= modulePrefix %>/services/notification';
 // import AjaxService from '<%= modulePrefix %>/services/ajax';
 
 class PasswordCreateController extends Controller {
-    // @service session!: SessionService;
-    // @service intl!: IntlService;
-    // @service notifications!: Notifications;
-    // @service ajax!: AjaxService;
+    // @service declare session: SessionService;
+    // @service declare intl: IntlService;
+    // @service declare notification: Notification;
+    // @service declare ajax: AjaxService;
     //
     // username: string = '';
     // password: string = '';
@@ -33,10 +34,10 @@ class PasswordCreateController extends Controller {
     //             })
     //         });
     //
-    //         this.notifications.success(this.intl.t('password.create.success'));
+    //         this.notification.success(this.intl.t('password.create.success'));
     //         return this.session.authenticate('authenticator:oauth2-gavant', username, newPassword);
     //     } catch (err) {
-    //         this.notifications.errors(err?.payload ?? err);
+    //         this.notification.errors(err?.payload ?? err);
     //         throw err;
     //     }
     // }

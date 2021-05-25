@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
 import Route from '@ember/routing/route';
+import { cached } from '@glimmer/tracking';
 
 type Constructor<T = Route> = new (...args: any[]) => T;
 
@@ -21,7 +21,7 @@ export function PageHeader<TBase extends Constructor>(Base: TBase) {
          * @type {string}
          * @memberof PageHeaderClass
          */
-        @computed('routeName')
+        @cached
         get headerTemplate(): string {
             return `${this.routeName}/header`;
         }
@@ -32,7 +32,7 @@ export function PageHeader<TBase extends Constructor>(Base: TBase) {
          * @param {{}} model
          * @memberof PageHeaderClass
          */
-        renderTemplate(controller: Controller, model: {}): void {
+        renderTemplate(controller: Controller, model: Record<string, unknown>): void {
             super.renderTemplate(controller, model);
 
             this.render(this.headerTemplate, {
@@ -63,7 +63,7 @@ export function PageFooter<TBase extends Constructor>(Base: TBase) {
          * @type {string}
          * @memberof PageHeaderClass
          */
-        @computed('routeName')
+        @cached
         get footerTemplate(): string {
             return `${this.routeName}/footer`;
         }
@@ -74,7 +74,7 @@ export function PageFooter<TBase extends Constructor>(Base: TBase) {
          * @param {{}} model
          * @memberof PageHeaderClass
          */
-        renderTemplate(controller: Controller, model: {}): void {
+        renderTemplate(controller: Controller, model: Record<string, unknown>): void {
             super.renderTemplate(controller, model);
 
             this.render(this.footerTemplate, {
@@ -105,7 +105,7 @@ export function PageNav<TBase extends Constructor>(Base: TBase) {
          * @type {string}
          * @memberof PageHeaderClass
          */
-        @computed('routeName')
+        @cached
         get navTemplate(): string {
             return `${this.routeName}/nav`;
         }
@@ -116,7 +116,7 @@ export function PageNav<TBase extends Constructor>(Base: TBase) {
          * @param {{}} model
          * @memberof PageHeaderClass
          */
-        renderTemplate(controller: Controller, model: {}): void {
+        renderTemplate(controller: Controller, model: Record<string, unknown>): void {
             super.renderTemplate(controller, model);
 
             this.render(this.navTemplate, {

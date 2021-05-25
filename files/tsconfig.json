@@ -25,7 +25,11 @@
             "<%= modulePrefix %>/tests/*": ["tests/*"],
             "<%= modulePrefix %>/*": ["app/*"],
             "*": ["types/*"],
-            "fetch": ["node_modules/ember-fetch"]
+            "fetch": ["node_modules/ember-fetch"],
+            "@glimmer/tracking": [
+                "node_modules/@glimmer/tracking/dist/types"
+              ]
+
         }
     },
     "include": ["app/**/*", "tests/**/*", "types/**/*"]

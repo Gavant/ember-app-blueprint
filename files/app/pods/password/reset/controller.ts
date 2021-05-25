@@ -1,17 +1,18 @@
 // REMOVE COMMENTS TO USE WITH EMBER-VALIDATIONS/CHANGESET ADDONS
 import Controller from '@ember/controller';
+
 // import { action } from '@ember/object';
 // import { inject as service } from '@ember/service';
 // import { tracked } from '@glimmer/tracking';
 // import { BufferedChangeset } from 'ember-changeset/types';
 // import IntlService from 'ember-intl/services/intl';
-// import Notifications from '<%= modulePrefix %>/services/notifications';
+// import Notification from '<%= modulePrefix %>/services/notification';
 // import AjaxService from '<%= modulePrefix %>/services/ajax';
 
 export default class PasswordResetController extends Controller {
-    // @service intl!: IntlService;
-    // @service notifications!: Notifications;
-    // @service ajax!: AjaxService;
+    // @service declare intl: IntlService;
+    // @service declare notification: Notification;
+    // @service declare ajax: AjaxService;
     //
     // queryParams: string[] = ['code', 'email'];
     //
@@ -31,10 +32,10 @@ export default class PasswordResetController extends Controller {
     //         });
     //
     //         this.transitionToRoute('login');
-    //         this.notifications.success(this.intl.t('password.reset.success'));
+    //         this.notification.success(this.intl.t('password.reset.success'));
     //         return result;
     //     } catch (err) {
-    //         this.notifications.errors(err.payload);
+    //         this.notification.errors(err.payload);
     //         throw err;
     //     }
     // }

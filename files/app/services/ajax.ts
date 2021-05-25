@@ -1,13 +1,15 @@
-import ENV from '<%= modulePrefix %>/config/environment';
 import { computed, setProperties } from '@ember/object';
 import { assign } from '@ember/polyfills';
 import Service, { inject as service } from '@ember/service';
+
 import SessionService from 'ember-simple-auth/services/session';
+
+import ENV from '<%= modulePrefix %>/config/environment';
 import fetch from 'fetch';
 import { reject } from 'rsvp';
 
 export default class AjaxService extends Service {
-    @service session!: SessionService;
+    @service declare session: SessionService;
 
     /**
      * Add the oauth token authorization header to all requests

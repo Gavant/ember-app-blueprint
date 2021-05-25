@@ -2,8 +2,10 @@
 // import ChangesetRoute from '@gavant/ember-validations/mixins/changeset-route';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+
 import PasswordResetController from '<%= modulePrefix %>/pods/password/reset/controller';
 import AjaxService from '<%= modulePrefix %>/services/ajax';
+
 // import Validations from '<%= modulePrefix %>/validations/password/reset';
 
 export interface RouteParams {
@@ -13,7 +15,7 @@ export interface RouteParams {
 
 // export default class PasswordReset extends ChangesetRoute(Route) {
 export default class PasswordReset extends Route {
-    @service ajax!: AjaxService;
+    @service declare ajax: AjaxService;
     // validations = Validations;
 
     model() {

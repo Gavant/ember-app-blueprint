@@ -1,20 +1,21 @@
 // REMOVE COMMENTS TO USE WITH EMBER-VALIDATIONS/CHANGESET ADDONS
 
 import Controller from '@ember/controller';
+
 // import { action, get } from '@ember/object';
 // import { inject as service } from '@ember/service';
 // import { inject as controller } from '@ember/controller';
 // import { BufferedChangeset } from 'ember-changeset/types';
 // import SessionService from 'ember-simple-auth/services/session';
 // import LoadingBar from '<%= modulePrefix %>/services/loading-bar';
-// import Notifications from '<%= modulePrefix %>/services/notifications';
+// import Notification from '<%= modulePrefix %>/services/notification';
 // import PasswordCreateController from '<%= modulePrefix %>/pods/password/create/controller';
 // import { ApiServerErrorResponse } from '../application/adapter';
 
 class LoginController extends Controller {
-    // @service loadingBar!: LoadingBar;
-    // @service notifications!: Notifications;
-    // @service session!: SessionService;
+    // @service declare loadingBar: LoadingBar;
+    // @service declare notification: Notification;
+    // @service declare session: SessionService;
     //
     // @controller('password/create') passwordCreateController!: PasswordCreateController;
     //
@@ -38,7 +39,7 @@ class LoginController extends Controller {
     //             return this.transitionToRoute('password.create');
     //         }
     //
-    //         this.notifications.errors(response);
+    //         this.notification.errors(response);
     //         throw err;
     //     }
     // }

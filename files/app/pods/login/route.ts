@@ -2,15 +2,18 @@
 // import ChangesetRoute from '@gavant/ember-validations/mixins/changeset-route';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
-import LoginController from '<%= modulePrefix %>/pods/login/controller';
+
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 import SessionService from 'ember-simple-auth/services/session';
+
+import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
+import LoginController from '<%= modulePrefix %>/pods/login/controller';
+
 // import Validations from 'rudie/validations/login';
 
 // export default class Login extends PageLayout(ChangesetRoute(Route.extend(UnauthenticatedRouteMixin))) {
 export default class Login extends PageLayout(Route.extend(UnauthenticatedRouteMixin)) {
-    @service session!: SessionService;
+    @service declare session: SessionService;
     classNames = ['login'];
     routeIfAlreadyAuthenticated = 'landing-route-here';
     // validations = Validations;

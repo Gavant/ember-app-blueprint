@@ -15,11 +15,11 @@ export interface Notification extends NotificationOptions {}
 
 declare module 'ember-cli-notifications/services/notifications' {
     export default class NotificationService extends Service {
-        addNotification(options: NotificationOptions): Object;
-        success(message: string, options?: NotificationOptions): Object;
-        error(message: string, options?: NotificationOptions): Object;
-        info(message: string, options?: NotificationOptions): Object;
-        warning(message: string, options?: NotificationOptions): Object;
+        addNotification(options: NotificationOptions): Record<string, unknown>;
+        success(message: string, options?: NotificationOptions): Record<string, unknown>;
+        error(message: string, options?: NotificationOptions): Record<string, unknown>;
+        info(message: string, options?: NotificationOptions): Record<string, unknown>;
+        warning(message: string, options?: NotificationOptions): Record<string, unknown>;
         removeNotification(notification: Notification): void;
         setupAutoClear(notification: Notification): void;
         pauseAutoClear(notification: Notification): void;
