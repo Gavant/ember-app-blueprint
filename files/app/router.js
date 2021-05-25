@@ -12,7 +12,6 @@ Router.map(function() {
     this.route('password', function() {
         this.route('forgot');
         this.route('reset');
-        this.route('create');
     });
 
     //make sure these routes are always defined last!

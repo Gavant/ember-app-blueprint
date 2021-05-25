@@ -1,28 +1,17 @@
 import { inject as service } from '@ember/service';
 
+import Adapter from '@ember-data/adapter/json-api';
 import FastbootService from 'ember-cli-fastboot/services/fastboot';
-import DS from 'ember-data';
+// eslint-disable-next-line ember/no-mixins
 import FastbootAdapter from 'ember-data-storefront/mixins/fastboot-adapter';
+// eslint-disable-next-line ember/no-mixins
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import SessionService from 'ember-simple-auth/services/session';
 
 import ENV from '<%= modulePrefix %>/config/environment';
 import { reject } from 'rsvp';
 
-export interface ApiServerError {
-    code: string;
-    detail?: string;
-    meta: {
-        entity?: string;
-    };
-}
-
-export interface ApiServerErrorResponse {
-    errors: ApiServerError[];
-}
-
-//@ts-ignore TODO we need to figure out how to allow DS.JSONAPIAdapter with custom properties correctly
-export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMixin, FastbootAdapter) {
+export default class Application extends Adapter.extend(DataAdapterMixin, FastbootAdapter) {
     @service declare session: SessionService;
     @service declare fastboot: FastbootService;
 
@@ -42,13 +31,22 @@ export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMix
         return headers;
     }
 
-    /**
-     * Handles unauthenticated requests (logs the user out)
-     * @param  {Number} status
-     * @param  {Object} headers
-     * @returns Object
-     */
-    handleResponse(status: number, headers: {}, payload: {}, requestData: {}) {
+     /**
+      *Handles unauthenticated requests (logs the user out)
+      *
+      * @param {number} status
+      * @param {Record<string, unknown>} headers
+      * @param {Record<string, unknown>} payload
+      * @param {Record<string, unknown>} requestData
+      * @return {*}
+      * @memberof Application
+      */
+     handleResponse(
+        status: number,
+        headers: Record<string, unknown>,
+        payload: Record<string, unknown>,
+        requestData: Record<string, unknown>
+    ) {
         if (status === 401) {
             if (this.session.isAuthenticated) {
                 this.session.invalidate();
@@ -61,6 +59,7 @@ export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMix
 
         return super.handleResponse(status, headers, payload, requestData);
     }
+
 
     /**
      * Safely redirects to a new URL in client-side environments

@@ -22,5 +22,4 @@ declare const config: {
         prepend: boolean;
     };
     APP: Record<string, unknown>;
-
 };

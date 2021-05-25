@@ -96,7 +96,6 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                 return data;
             }
         }
-
     }
 
     /**
@@ -129,7 +128,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                 id_token: idToken
             };
 
-            let response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
+            const response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
 
             expiresIn = response.expires_in || expiresIn;
             refreshToken = response.refresh_token || refreshToken;

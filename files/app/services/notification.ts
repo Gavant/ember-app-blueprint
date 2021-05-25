@@ -73,3 +73,9 @@ export default class Notifications extends NotificationService {
         );
     }
 }
+
+declare module '@ember/service' {
+    interface Registry {
+        notification: Notification;
+    }
+}

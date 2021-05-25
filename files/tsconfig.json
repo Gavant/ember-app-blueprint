@@ -27,9 +27,9 @@
             "*": ["types/*"],
             "fetch": ["node_modules/ember-fetch"],
             "@glimmer/tracking": [
+                "node_modules/ember-cached-decorator-polyfill",
                 "node_modules/@glimmer/tracking/dist/types"
               ]
-
         }
     },
     "include": ["app/**/*", "tests/**/*", "types/**/*"]

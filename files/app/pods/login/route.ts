@@ -1,43 +1,51 @@
-// REMOVE COMMENTS TO USE WITH EMBER-VALIDATIONS/CHANGESET ADDONS
-// import ChangesetRoute from '@gavant/ember-validations/mixins/changeset-route';
+import Transition from '@ember/routing/-private/transition';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 import SessionService from 'ember-simple-auth/services/session';
 
+import createChangeset, { GenericChangeset } from '@gavant/ember-validations/utilities/create-changeset';
+
+// eslint-disable-next-line ember/no-mixins
 import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
 import LoginController from '<%= modulePrefix %>/pods/login/controller';
+import { LOGIN_VALIDATIONS } from '<%= modulePrefix %>/validations/login';
 
-// import Validations from 'rudie/validations/login';
-
-// export default class Login extends PageLayout(ChangesetRoute(Route.extend(UnauthenticatedRouteMixin))) {
-export default class Login extends PageLayout(Route.extend(UnauthenticatedRouteMixin)) {
+export type LoginChangeset = GenericChangeset<{ emailAddress?: string; password?: string }>;
+export default class Login extends PageLayout(Route) {
     @service declare session: SessionService;
-    classNames = ['login'];
+    classNames = ['unauthenticated login'];
     routeIfAlreadyAuthenticated = 'landing-route-here';
-    // validations = Validations;
+
+    /**
+     * Redirect if authenticated
+     *
+     * @memberof Login
+     */
+    beforeModel() {
+        this.session.prohibitAuthentication('index');
+    }
+
 
     /**
      * Creates a POJO for the login form changeset
      *
      * @return {Object}
      */
-    model() {
-        return {
-            emailAddress: null,
-            password: null
-        };
+     model(): LoginChangeset {
+        const changeset = createChangeset({}, LOGIN_VALIDATIONS);
+        return changeset;
     }
+
 
     /**
      * Reset controller state when leaving the route
      *
-     * @param {Controller} controller
+     * @param {LoginController} controller
      * @param {boolean} isExiting
      * @param {any} transition
      */
-    resetController(controller: LoginController, isExiting: boolean, transition: any): void {
+    resetController(controller: LoginController, isExiting: boolean, transition: Transition): void {
         super.resetController(controller, isExiting, transition);
         if (isExiting) {
             this.session.set('isAuthenticating', false);

@@ -18,3 +18,9 @@ export default class LoadingBar extends Service {
         this.isShown = false;
     }
 }
+
+declare module '@ember/service' {
+    interface Registry {
+        loadingBar: LoadingBar;
+    }
+}

@@ -1,15 +1,15 @@
-import { unsendable } from '<%= modulePrefix %>/decorators/models';
-import DS from 'ember-data';
-import attr from 'ember-data/attr';
+import Model, { attr } from '@ember-data/model';
 
-export default class User extends DS.Model {
-    @attr('string') email!: string;
-    @attr('string') firstName!: string;
-    @attr('string') lastName!: string;
-    @attr('string') password!: string;
-    @attr('string') passwordConfirmation!: string;
-    @unsendable @attr('date') registeredOn!: Date;
-    @attr('string') username!: string;
+import { unsendable } from '<%= modulePrefix %>/decorators/models';
+
+export default class User extends Model {
+    @attr('string') declare email: string;
+    @attr('string') declare firstName: string;
+    @attr('string') declare lastName: string;
+    @attr('string') declare password: string;
+    @attr('string') declare passwordConfirmation: string;
+    @unsendable @attr('date') declare registeredOn: Date;
+    @attr('string') declare username: string;
 
     get fullName() {
         return `${this.firstName} ${this.lastName}`;
