@@ -9,8 +9,8 @@ import Oauth2PasswordGrantAuthenticator from 'ember-simple-auth/authenticators/o
 import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
 import isFastBoot from 'ember-simple-auth/utils/is-fastboot';
 
+import { ServerErrorPayload } from '<%= modulePrefix %>';
 import ENV from '<%= modulePrefix %>/config/environment';
-import { ApiServerErrorResponse } from '<%= modulePrefix %>/pods/application/adapter';
 import AjaxService from '<%= modulePrefix %>/services/ajax';
 
 export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthenticator {
@@ -68,7 +68,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
 
             return response;
         } catch (err) {
-            const response = err.responseJSON as ApiServerErrorResponse;
+            const response = err.responseJSON as ServerErrorPayload;
             throw response;
         }
     }

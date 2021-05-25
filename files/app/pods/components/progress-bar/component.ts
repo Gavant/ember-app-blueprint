@@ -8,7 +8,12 @@ interface ProgressBarArgs {
     light: boolean;
 }
 
-export default class ProgressBar extends Component<ProgressBarArgs> {
+export interface ProgressBarSignature {
+    Element: HTMLDivElement;
+    Args: ProgressBarArgs;
+}
+
+export default class ProgressBar extends Component<ProgressBarSignature> {
     @service declare loadingBar: LoadingBar;
 
     /**
