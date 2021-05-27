@@ -11,7 +11,6 @@ export default class Application extends Controller {
     @service declare session: SessionService;
     @service declare currentUser: CurrentUserService;
 
-
     @tracked notificationPosition = 'top-right'
 
     /**

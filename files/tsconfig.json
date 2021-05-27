@@ -32,5 +32,5 @@
               ]
         }
     },
-    "include": ["app/**/*", "tests/**/*", "types/**/*"]
+    "include": ["app/**/*", "tests/**/*", "types/**/*", "mirage/**/*"]
 }

@@ -1,5 +1,15 @@
 import Service from '@ember/service';
 
+export interface NotificationItem {
+    message: string;
+    type: 'error' | 'info' | 'success' | 'warning';
+    autoClear: boolean;
+    clearDuration: number;
+    onClick: () => void;
+    htmlContent: string;
+    cssClasses: string[];
+}
+
 export interface NotificationOptions {
     message: string;
     type?: string;
@@ -15,11 +25,12 @@ export interface Notification extends NotificationOptions {}
 
 declare module 'ember-cli-notifications/services/notifications' {
     export default class NotificationService extends Service {
-        addNotification(options: NotificationOptions): Record<string, unknown>;
-        success(message: string, options?: NotificationOptions): Record<string, unknown>;
-        error(message: string, options?: NotificationOptions): Record<string, unknown>;
-        info(message: string, options?: NotificationOptions): Record<string, unknown>;
-        warning(message: string, options?: NotificationOptions): Record<string, unknown>;
+        content: NotificationItem[];
+        addNotification(options: NotificationOptions): NotificationItem;
+        success(message: string, options?: NotificationOptions): NotificationItem;
+        error(message: string, options?: NotificationOptions): NotificationItem;
+        info(message: string, options?: NotificationOptions): NotificationItem;
+        warning(message: string, options?: NotificationOptions): NotificationItem;
         removeNotification(notification: Notification): void;
         setupAutoClear(notification: Notification): void;
         pauseAutoClear(notification: Notification): void;
