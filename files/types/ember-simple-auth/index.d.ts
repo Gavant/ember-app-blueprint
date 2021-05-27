@@ -4,7 +4,6 @@ declare module 'ember-simple-auth/utils/is-fastboot' {
 }
 
 declare module 'ember-simple-auth/test-support' {
-import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
-
-                export function authenticateSession(responseFromApi: SessionAuthenticatedData): void;
-    }
+    import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
+    export function authenticateSession(responseFromApi: SessionAuthenticatedData): void;
+}
