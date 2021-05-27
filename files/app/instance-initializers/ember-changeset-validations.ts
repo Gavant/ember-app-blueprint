@@ -1,4 +1,3 @@
-
 import ApplicationInstance from '@ember/application/instance';
 import { isNone } from '@ember/utils';
 

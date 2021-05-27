@@ -31,16 +31,16 @@ export default class Application extends Adapter.extend(DataAdapterMixin, Fastbo
         return headers;
     }
 
-     /**
-      *Handles unauthenticated requests (logs the user out)
-      *
-      * @param {number} status
-      * @param {Record<string, unknown>} headers
-      * @param {Record<string, unknown>} payload
-      * @param {Record<string, unknown>} requestData
-      * @return {*}
-      * @memberof Application
-      */
+    /**
+     *Handles unauthenticated requests (logs the user out)
+     *
+     * @param {number} status
+     * @param {Record<string, unknown>} headers
+     * @param {Record<string, unknown>} payload
+     * @param {Record<string, unknown>} requestData
+     * @return {*}
+     * @memberof Application
+     */
      handleResponse(
         status: number,
         headers: Record<string, unknown>,
@@ -59,7 +59,6 @@ export default class Application extends Adapter.extend(DataAdapterMixin, Fastbo
 
         return super.handleResponse(status, headers, payload, requestData);
     }
-
 
     /**
      * Safely redirects to a new URL in client-side environments
