@@ -1,28 +1,19 @@
-import ENV from '<%= modulePrefix %>/config/environment';
 import { inject as service } from '@ember/service';
-import DS from 'ember-data';
+
+import Adapter from '@ember-data/adapter/json-api';
+import FastbootService from 'ember-cli-fastboot/services/fastboot';
+// eslint-disable-next-line ember/no-mixins
+import FastbootAdapter from 'ember-data-storefront/mixins/fastboot-adapter';
+// eslint-disable-next-line ember/no-mixins
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import SessionService from 'ember-simple-auth/services/session';
+
+import ENV from '<%= modulePrefix %>/config/environment';
 import { reject } from 'rsvp';
-import FastbootAdapter from 'ember-data-storefront/mixins/fastboot-adapter';
-import FastbootService from 'ember-cli-fastboot/services/fastboot';
 
-export interface ApiServerError {
-    code: string;
-    detail?: string;
-    meta: {
-        entity?: string;
-    };
-}
-
-export interface ApiServerErrorResponse {
-    errors: ApiServerError[];
-}
-
-//@ts-ignore TODO we need to figure out how to allow DS.JSONAPIAdapter with custom properties correctly
-export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMixin, FastbootAdapter) {
-    @service session!: SessionService;
-    @service fastboot!: FastbootService;
+export default class Application extends Adapter.extend(DataAdapterMixin, FastbootAdapter) {
+    @service declare session: SessionService;
+    @service declare fastboot: FastbootService;
 
     host = ENV.apiBaseUrl;
 
@@ -41,12 +32,21 @@ export default class Application extends DS.JSONAPIAdapter.extend(DataAdapterMix
     }
 
     /**
-     * Handles unauthenticated requests (logs the user out)
-     * @param  {Number} status
-     * @param  {Object} headers
-     * @returns Object
+     *Handles unauthenticated requests (logs the user out)
+     *
+     * @param {number} status
+     * @param {Record<string, unknown>} headers
+     * @param {Record<string, unknown>} payload
+     * @param {Record<string, unknown>} requestData
+     * @return {*}
+     * @memberof Application
      */
-    handleResponse(status: number, headers: {}, payload: {}, requestData: {}) {
+     handleResponse(
+        status: number,
+        headers: Record<string, unknown>,
+        payload: Record<string, unknown>,
+        requestData: Record<string, unknown>
+    ) {
         if (status === 401) {
             if (this.session.isAuthenticated) {
                 this.session.invalidate();

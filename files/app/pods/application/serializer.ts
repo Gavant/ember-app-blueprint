@@ -1,9 +1,13 @@
-import DS from 'ember-data';
 import { isArray } from '@ember/array';
 import { camelize } from '@ember/string';
+
+import Serializer from '@ember-data/serializer/json-api';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import ModelRegistry from 'ember-data/types/registries/model';
 
-export default class ApplicationSerializer extends DS.JSONAPISerializer {
+export default class ApplicationSerializer extends Serializer {
     keyForAttribute(key: string) {
         return key;
     }
@@ -22,17 +26,17 @@ export default class ApplicationSerializer extends DS.JSONAPISerializer {
      * value was not modified. Also never serialize attributes that have been
      * annotated with the `@unsendable` decorator.
      *
-     * @param snapshot {DS.Snapshot<string | number>}
-     * @param json {Object}
-     * @param key {String}
-     * @param attribute {Object}
-     * @see https://github.com/emberjs/data/issues/3467#issuecomment-543176123
+     * @param {(DS.Snapshot<string | number>)} snapshot
+     * @param {({ attributes: Record<string, unknown> | null })} json
+     * @param {string} key
+     * @param {Record<string, unknown>} attribute
+     * @memberof ApplicationSerializer
      */
     serializeAttribute(
         snapshot: DS.Snapshot<string | number>,
-        json: { attributes: Object | null },
+        json: { attributes: Record<string, unknown> | null },
         key: string,
-        attribute: {}
+        attribute: Record<string, unknown>
     ) {
         if (
             snapshot.record.get('isNew') ||
@@ -46,6 +50,7 @@ export default class ApplicationSerializer extends DS.JSONAPISerializer {
         }
     }
 
+
     /**
      * Append an `attributes: {}` to the request json
      * if `attributes` aren't present
@@ -56,16 +61,17 @@ export default class ApplicationSerializer extends DS.JSONAPISerializer {
      * @param {Object} options
      */
     serializeIntoHash(
-        json: { data: { attributes: Object } },
+        json: { data: { attributes: Record<string, unknown> } },
         type: ModelRegistry,
         snapshot: DS.Snapshot<string | number>,
-        options: Object
+        options: Record<string, unknown>
     ) {
         super.serializeIntoHash(json, type, snapshot, options);
         if (!json.data.attributes) {
             json.data.attributes = {};
         }
     }
+
 }
 
 declare module 'ember-data/types/registries/serializer' {

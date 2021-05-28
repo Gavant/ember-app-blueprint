@@ -15,4 +15,11 @@ declare const config: {
     rootURL: string;
     routerRootURL: string;
     apiBaseUrl: string;
+    fastboot: {
+        hostWhitelist: Array<string | RegExp>;
+    };
+    pageTitle: {
+        prepend: boolean;
+    };
+    APP: Record<string, unknown>;
 };

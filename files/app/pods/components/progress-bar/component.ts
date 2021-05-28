@@ -1,13 +1,20 @@
-import LoadingBar from '<%= modulePrefix %>/services/loading-bar';
 import { inject as service } from '@ember/service';
-import Component from '@glimmer/component';
+
+import Component from '@glint/environment-ember-loose/glimmer-component';
+
+import LoadingBar from '<%= modulePrefix %>/services/loading-bar';
 
 interface ProgressBarArgs {
     light: boolean;
 }
 
-export default class ProgressBar extends Component<ProgressBarArgs> {
-    @service loadingBar!: LoadingBar;
+export interface ProgressBarSignature {
+    Element: HTMLDivElement;
+    Args: ProgressBarArgs;
+}
+
+export default class ProgressBar extends Component<ProgressBarSignature> {
+    @service declare loadingBar: LoadingBar;
 
     /**
      * Returns whether or not the loading bar is visible
@@ -27,5 +34,11 @@ export default class ProgressBar extends Component<ProgressBarArgs> {
      */
     get light(): boolean {
         return this.args.light ?? false;
+    }
+}
+
+declare module '@glint/environment-ember-loose/registry' {
+    export default interface Registry {
+        ProgressBar: typeof ProgressBar;
     }
 }

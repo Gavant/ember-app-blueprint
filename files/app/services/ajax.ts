@@ -1,19 +1,21 @@
-import ENV from '<%= modulePrefix %>/config/environment';
-import { computed, setProperties } from '@ember/object';
 import { assign } from '@ember/polyfills';
 import Service, { inject as service } from '@ember/service';
+import { cached } from '@glimmer/tracking';
+
 import SessionService from 'ember-simple-auth/services/session';
+
+import ENV from '<%= modulePrefix %>/config/environment';
 import fetch from 'fetch';
 import { reject } from 'rsvp';
 
 export default class AjaxService extends Service {
-    @service session!: SessionService;
+    @service declare session: SessionService;
 
     /**
      * Add the oauth token authorization header to all requests
      * @return {Object}
      */
-    @computed('session.{isAuthenticated,data.authenticated.id_token}')
+    @cached
     get authorizationHeaders() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
@@ -27,7 +29,7 @@ export default class AjaxService extends Service {
      * The default headers on all requests
      * @return {Object}
      */
-    @computed('authorizationHeaders', 'clientIdentity.uuidHeader')
+    @cached
     get headers() {
         const headers = assign({ 'Content-Type': 'application/vnd.api+json' }, this.authorizationHeaders);
         return headers;
@@ -44,12 +46,9 @@ export default class AjaxService extends Service {
      * @return {Promise}
      */
     async request(url: string, options: RequestInit = {}) {
-        setProperties(options, {
-            // credentials: 'include',
-            headers: { ...this.headers, ...(options.headers || {}) }
-        });
+        options.headers = { ...this.headers, ...(options.headers || {}) };
 
-        const baseUrl = /^https?\:\/\//.test(url) ? '' : `${ENV.apiBaseUrl}/`;
+        const baseUrl = /^https?:\/\//.test(url) ? '' : `${ENV.apiBaseUrl}/`;
         const response = await fetch(`${baseUrl}${url.replace(/^\//, '')}`, options);
         const responseHeaders = this.parseHeaders(response.headers);
         const result = await this.handleResponse(response.status, responseHeaders, response);
@@ -72,7 +71,7 @@ export default class AjaxService extends Service {
      * @param  {Object} response
      * @return {Promise}
      */
-    async handleResponse(status: number, _headers: {}, response: Response) {
+    async handleResponse(status: number, _headers: Record<string, unknown>, response: Response) {
         // uncomment when using the @gavant/ember-app-version-update addon
         // this.versionUpdate.checkResponseHeaders(headers);
 
@@ -102,7 +101,7 @@ export default class AjaxService extends Service {
      * @return {Boolean}
      */
     isSuccess(status: string | number) {
-        let s = this.normalizeStatus(status);
+        const s = this.normalizeStatus(status);
         return (s >= 200 && s < 300) || s === 304;
     }
 
@@ -128,7 +127,7 @@ export default class AjaxService extends Service {
     parseHeaders(headers: Headers) {
         if (headers && typeof headers.keys === 'function') {
             const parsedHeaders = {} as any;
-            for (let key of headers.keys()) {
+            for (const key of headers.keys()) {
                 parsedHeaders[key] = headers.get(key);
             }
             return parsedHeaders;

@@ -1,4 +1,3 @@
-
 import TranslationHelper from '@gavant/glint-template-types/types/ember-intl/translation-helper';
 import DidInsertModifier from '@gavant/glint-template-types/types/ember-render-modifiers/did-insert';
 import DidUpdateModifier from '@gavant/glint-template-types/types/ember-render-modifiers/did-update';

@@ -1,8 +1,11 @@
-import DS from 'ember-data';
 import { guidFor } from '@ember/object/internals';
+
+import Serializer from '@ember-data/serializer/json-api';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import DS from 'ember-data';
 import { singularize } from 'ember-inflector';
 
-type Constructor<T = DS.JSONAPISerializer> = new (...args: any[]) => T;
+type Constructor<T = Serializer> = new (...args: any[]) => T;
 
 export interface SerializeAttrs {
     [x: string]: {
@@ -166,7 +169,7 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
                 this.visitedRecordIds[serialized.data[internalModelKey]] = {};
             }
 
-            for (let relationshipId in serialized.data.relationships) {
+            for (const relationshipId in serialized.data.relationships) {
                 if (this.visitedRecordIds[relationshipId]) {
                     delete serialized.data.relationships[relationshipId];
                 }
@@ -222,7 +225,7 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
         flattenEachRelationship(payload: JsonPayload, record: JsonPayloadRecord) {
             if (record.relationships) {
                 Object.keys(record.relationships).forEach((key) => {
-                    let rel = record.relationships![key].data;
+                    const rel = record.relationships![key].data;
                     if (Array.isArray(rel)) {
                         // hasMany
                         rel.forEach((item) => this.flattenRelationship(payload, item));
@@ -282,7 +285,7 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
 
             if (rels) {
                 Object.keys(rels).forEach((rel: string) => {
-                    let relationshipData = rels[rel].data;
+                    const relationshipData = rels[rel].data;
                     if (relationshipData) {
                         this.normalizeRelationship(relationshipData, store, included);
                     }
@@ -291,7 +294,7 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
 
             // now run through the included objects looking for client ids
             if (payload.included) {
-                for (let includedItem of payload.included) {
+                for (const includedItem of payload.included) {
                     this.updateRecord(includedItem, store);
                 }
             }
@@ -331,13 +334,13 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
             }
 
             item.__normalized = true;
-            let includedData = included[item.id];
+            const includedData = included[item.id];
 
             if (includedData) {
                 item = includedData;
             }
 
-            let internalRelationships = item.relationships;
+            const internalRelationships = item.relationships;
 
             if (internalRelationships !== undefined) {
                 Object.keys(internalRelationships).forEach((rel) => {
@@ -366,7 +369,7 @@ export default function SidepostRelationships<TBase extends Constructor>(Base: T
                     .peekAll(json.type)
                     .filterBy('currentState.stateName', 'root.loaded.created.uncommitted')
                     .find(
-                        (record: { _internalModel: object }) =>
+                        (record: { _internalModel: Record<string, unknown> }) =>
                             guidFor(record._internalModel) === json[internalModelKey]
                     );
 

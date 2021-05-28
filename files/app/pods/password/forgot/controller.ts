@@ -1,38 +1,45 @@
-// REMOVE COMMENTS TO USE WITH EMBER-VALIDATIONS/CHANGESET ADDONS
 import Controller from '@ember/controller';
-// import { action } from '@ember/object';
-// import { inject as service } from '@ember/service';
-// import { tracked } from '@glimmer/tracking';
-// import { BufferedChangeset } from 'ember-changeset/types';
-// import Notifications from '<%= modulePrefix %>/services/notifications';
-// import AjaxService from '<%= modulePrefix %>/services/ajax';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+
+import IntlService from 'ember-intl/services/intl';
+
+import PasswordForgotRoute, { ForgotPasswordChangeset } from '<%= modulePrefix %>/pods/password/forgot/route';
+import AjaxService from '<%= modulePrefix %>/services/ajax';
+import Notification from '<%= modulePrefix %>/services/notification';
+import { RouteModel } from '<%= modulePrefix %>/utils/typescript';
 
 export default class ForgotPasswordController extends Controller {
-    // @service notifications!: Notifications;
-    // @service ajax!: AjaxService;
-    //
-    // @tracked submitSuccess: boolean = false;
-    //
-    // /**
-    //  * Submits password forgot form
-    //  *
-    //  * @param {Changeset} changeset
-    //  * @return {Promise}
-    //  */
-    // @action
-    // async submit(changeset: BufferedChangeset) {
-    //     try {
-    //         const username = changeset.email;
-    //         const result = await this.ajax.request('/oauth2/initiate-forgot-password', {
-    //             method: 'POST',
-    //             body: JSON.stringify({ username })
-    //         });
-    //
-    //         this.submitSuccess = true;
-    //         return result;
-    //     } catch (err) {
-    //         this.notifications.errors(err.payload);
-    //         throw err;
-    //     }
-    // }
+    @service declare notification: Notification;
+    @service declare ajax: AjaxService;
+    @service declare intl: IntlService;
+
+    declare model: RouteModel<PasswordForgotRoute>;
+
+    /**
+     * Submits password forgot form
+     *
+     * @param {ForgotPasswordChangeset} changeset
+     * @return {Promise}
+     */
+    @action
+    async submit(changeset: ForgotPasswordChangeset) {
+        try {
+            const emailAddress = changeset.emailAddress;
+            const result = await this.ajax.request('/oauth2/initiate-forgot-password', {
+                method: 'POST',
+                body: JSON.stringify({ username: emailAddress })
+            });
+            this.notification.success(
+                this.intl.t('password.forgot.success', {
+                    email: emailAddress
+                })
+            );
+
+            return result;
+        } catch (err) {
+            this.notification.errors(err.payload);
+            throw err;
+        }
+    }
 }

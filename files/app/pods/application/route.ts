@@ -1,20 +1,24 @@
-import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
-import CurrentUserService from '<%= modulePrefix %>/services/current-user';
 import { action } from '@ember/object';
 import Transition from '@ember/routing/-private/transition';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+
 import FastbootService from 'ember-cli-fastboot/services/fastboot';
 import IntlService from 'ember-intl/services/intl';
+// eslint-disable-next-line ember/no-mixins
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import SessionService from 'ember-simple-auth/services/session';
 
+// eslint-disable-next-line ember/no-mixins
+import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
+import CurrentUserService from '<%= modulePrefix %>/services/current-user';
+
 export default class Application extends PageLayout(Route.extend(ApplicationRouteMixin)) {
     routeAfterAuthentication = 'dashboard';
-    @service currentUser!: CurrentUserService;
-    @service session!: SessionService;
-    @service intl!: IntlService;
-    @service fastboot!: FastbootService;
+    @service declare currentUser: CurrentUserService;
+    @service declare session: SessionService;
+    @service declare intl: IntlService;
+    @service declare fastboot: FastbootService;
 
     async beforeModel(transition: Transition) {
         super.beforeModel(transition);

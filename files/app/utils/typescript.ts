@@ -1,4 +1,6 @@
 import Controller from '@ember/controller';
+import Route from '@ember/routing/route';
+
 export type ConcreteSubclass<T> = new (...args: any[]) => T;
 export type ControllerInstance = ConcreteSubclass<Controller>;
 /**
@@ -53,3 +55,85 @@ export const flattenEnum = <T>(e: any): T[] => {
  * ```
  */
 export type Modify<T, R> = Omit<T, keyof R> & R;
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
+/**
+ * Use this to declare a model property on the controller that is based upon the passed in route.
+ * ```
+ * e.g.
+ * declare model: RouteModel<LoginRoute>;
+ * ```
+ */
+export type RouteModel<T extends Route> = Awaited<ReturnType<T['model']>>;
+
+/**
+ * Join concatenates two strings with a dot in the middle, unless the last string is empty
+ *
+ * @export
+ * @interface Join
+ * @template K, P
+ */
+export type Join<K, P> = K extends string | number
+    ? P extends string | number
+        ? `${K}${'' extends P ? '' : '.'}${P}`
+        : never
+    : never;
+
+/**
+ * Workaround for the typescript instantiation depth limit of 50 as of 4.1
+ * https://dev.to/susisu/how-to-create-deep-recursive-types-5fgg#:~:text=As%20of%20TypeScript%204.1%2C%20the%20instantiation%20depth%20limit%20is%2050.
+ *
+ * @export
+ * @interface Recurse
+ * @template T
+ */
+type Recurse<T> = T extends { __rec: never }
+    ? never
+    : T extends { __rec: { __rec: infer U } }
+    ? { __rec: Recurse<U> }
+    : T extends { __rec: infer U }
+    ? U
+    : T;
+
+/**
+ * Workaround for the typescript instantiation depth limit of 50 as of 4.1
+ * https://dev.to/susisu/how-to-create-deep-recursive-types-5fgg#:~:text=As%20of%20TypeScript%204.1%2C%20the%20instantiation%20depth%20limit%20is%2050.
+ *
+ * @export
+ * @interface ParseRecursionToken
+ * @template T
+ */
+type ParseRecursionToken<T> = T extends { __rec: unknown } ? Recurse<Recurse<T>> : T;
+
+/**
+ * Acts as a depth limiter for recursion
+ *
+ * @export
+ * @interface Prev
+ */
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]];
+
+/**
+ * Type that recursively builds nested objects with the value of `__rec` being set as the path
+ *
+ * @export
+ * @interface PathsRecursion
+ * @template T, D
+ */
+type PathsRecursion<T, D extends number = 10> = [D] extends [never]
+    ? never
+    : T extends Record<string, unknown>
+    ? {
+          [K in keyof T]-?: K extends string | number ? { __rec: `${K}` | Join<K, Paths<T[K], Prev[D]>> } : never;
+      }[keyof T]
+    : '';
+
+/**
+ * Recursively find the paths of object `T`. You may pass in a depth limiter `D` to stop the recursion
+ *
+ * @export
+ * @interface Paths
+ * @template T, D
+ */
+export type Paths<T, D extends number = 10> = ParseRecursionToken<PathsRecursion<T, D>>;

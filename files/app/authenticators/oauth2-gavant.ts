@@ -1,18 +1,20 @@
-import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
-import { isEmpty } from '@ember/utils';
-import { later, cancel } from '@ember/runloop';
-import { assign } from '@ember/polyfills';
 import { warn } from '@ember/debug';
-import isFastBoot from 'ember-simple-auth/utils/is-fastboot';
-import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
+import { assign } from '@ember/polyfills';
+import { cancel, later } from '@ember/runloop';
+import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
+
 import Oauth2PasswordGrantAuthenticator from 'ember-simple-auth/authenticators/oauth2-password-grant';
-import AjaxService from '<%= modulePrefix %>/services/ajax';
+import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
+import isFastBoot from 'ember-simple-auth/utils/is-fastboot';
+
+import { ServerErrorPayload } from '<%= modulePrefix %>';
 import ENV from '<%= modulePrefix %>/config/environment';
-import { ApiServerErrorResponse } from '<%= modulePrefix %>/pods/application/adapter';
+import AjaxService from '<%= modulePrefix %>/services/ajax';
 
 export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthenticator {
-    @service ajax!: AjaxService;
+    @service declare ajax: AjaxService;
 
     serverTokenEndpoint = `${ENV.apiBaseUrl}/oauth2/token`;
     serverTokenRevocationEndpoint = `${ENV.apiBaseUrl}/oauth2/logout`;
@@ -66,7 +68,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
 
             return response;
         } catch (err) {
-            const response = err.responseJSON as ApiServerErrorResponse;
+            const response = err.responseJSON as ServerErrorPayload;
             throw response;
         }
     }
@@ -81,12 +83,8 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
         const refreshAccessTokens = this.refreshAccessTokens;
         if (!isEmpty(data.expires_at) && data.expires_at < now) {
             if (refreshAccessTokens) {
-                try {
-                    const result = await this._refreshAccessToken(data.expires_in, data.refresh_token, data.id_token);
-                    return result;
-                } catch (err) {
-                    throw err;
-                }
+                const result = await this._refreshAccessToken(data.expires_in, data.refresh_token, data.id_token);
+                return result;
             } else {
                 throw new Error('id_token refresh is not enabled');
             }
@@ -130,7 +128,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                 id_token: idToken
             };
 
-            let response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
+            const response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
 
             expiresIn = response.expires_in || expiresIn;
             refreshToken = response.refresh_token || refreshToken;

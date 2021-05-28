@@ -1,22 +1,26 @@
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+
 import NotificationService from 'ember-cli-notifications/services/notifications';
+import IntlService from 'ember-intl/services/intl';
+
+import { ServerError, ServerErrorPayload } from '<%= modulePrefix %>';
 
 export default class Notifications extends NotificationService {
-    @service intl;
+    @service declare intl: IntlService;
 
     /**
      * Displays toast notifications for the given server errors
-     * @param {ApiServerErrorResponse} payload
+     * @param {ServerErrorPayload} payload
      * @param {Object} options
      */
-    errors(payload, options) {
-        const errors = !payload || isEmpty(payload.errors) ? [{ code: 'unknown.unexpected' }] : payload.errors;
+    errors(payload?: ServerErrorPayload, options?: Record<string, unknown>) {
+        const errors = payload?.errors ?? ([{ code: 'unknown.unexpected' }] as ServerError[]);
 
         errors.forEach((error) => {
             const message = this.intl.t(`serverErrors.${error.code}`, {
                 meta: error.meta,
-                defaultMessage: error.message.detail || error.detail
+                defaultMessage: error.message?.detail || error.detail
             });
             this.addNotification(
                 Object.assign(
@@ -32,16 +36,16 @@ export default class Notifications extends NotificationService {
 
     /**
      * Displays a single grouped toast notification for the given server errors
-     * @param {ApiServerErrorResponse} payload
+     * @param {ServerErrorPayload} payload
      * @param {Object} options
      */
-    groupErrors(payload, options) {
+    groupErrors(payload: ServerErrorPayload, options?: Record<string, unknown>) {
         if (!payload || isEmpty(payload.errors)) {
             return this.errors(payload, options);
         }
 
         const errors = payload.errors;
-        const heading = options.groupHeading || this.intl.t('serverErrors.heading', { count: errors.length });
+        const heading = options?.groupHeading || this.intl.t('serverErrors.heading', { count: errors.length });
         const message = `
         <div>
             <p>${heading}</p>
@@ -67,5 +71,11 @@ export default class Notifications extends NotificationService {
                 options
             )
         );
+    }
+}
+
+declare module '@ember/service' {
+    interface Registry {
+        notification: Notification;
     }
 }

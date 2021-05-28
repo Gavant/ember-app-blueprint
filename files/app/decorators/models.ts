@@ -11,7 +11,7 @@ import { isArray } from '@ember/array';
  * Usage:
  * ```
  * class MyModel extends Model {
- *     \@unsendable \@attr('date') dateCreated!: Date;
+ *     \@unsendable \@attr('date') declare dateCreated: Date;
  * }
  * ```
  */
@@ -36,7 +36,7 @@ export function unsendable(target: any, propertyKey: string) {
  * Usage:
  * ```
  * class MyModel extends Model {
- *     \@unsendable \@attr('date') dateCreated!: Date;
+ *     \@unsendable \@attr('date') declare dateCreated: Date;
  * }
  * ```
  */
