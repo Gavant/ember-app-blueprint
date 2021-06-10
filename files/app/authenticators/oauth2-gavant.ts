@@ -60,7 +60,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
             data.scope = scopesString;
         }
         try {
-            const response = (await this.makeRequest(
+            let response = (await this.makeRequest(
                 this.serverTokenEndpoint,
                 data,
                 headers
@@ -158,7 +158,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                 access_token: accessToken
             };
 
-            const response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
+            let response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
 
             expiresIn = response.expires_in || expiresIn;
             refreshToken = response.refresh_token || refreshToken;
