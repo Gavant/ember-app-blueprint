@@ -21,11 +21,11 @@ module('Unit | Service | ajax', function (hooks) {
 
     test('Authorization headers when authenticated', async function (assert) {
         await authenticateSession({
-            id: '1',
-            id_token: 'asdf',
-            refresh_token: 'abcd',
+            access_token: 'asdf',
             expires_in: 123,
-            expires_at: 123
+            expires_at: 123,
+            refresh_token: 'abcd',
+            token_type: 'Bearer'
         });
         const service: AjaxService = this.owner.lookup('service:ajax');
         assert.deepEqual(service.authorizationHeaders, {

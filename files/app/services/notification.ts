@@ -6,7 +6,7 @@ import IntlService from 'ember-intl/services/intl';
 
 import { ServerError, ServerErrorPayload } from '<%= modulePrefix %>';
 
-export default class Notifications extends NotificationService {
+export default class Notification extends NotificationService {
     @service declare intl: IntlService;
 
     /**
@@ -18,10 +18,13 @@ export default class Notifications extends NotificationService {
         const errors = payload?.errors ?? ([{ code: 'unknown.unexpected' }] as ServerError[]);
 
         errors.forEach((error) => {
-            const message = this.intl.t(`serverErrors.${error.code}`, {
-                meta: error.meta,
-                defaultMessage: error.message?.detail || error.detail
-            });
+            const message = this.intl.t(
+                `serverErrors.${error.meta?.entity ? `${error.meta.entity}.` : ''}${error.code}`,
+                {
+                    meta: error.meta,
+                    defaultMessage: error.message ? error.message.detail : error.detail
+                }
+            );
             this.addNotification(
                 Object.assign(
                     {
@@ -52,10 +55,13 @@ export default class Notifications extends NotificationService {
             <ul>
                 ${errors.reduce(
                     (prev, e) =>
-                        `${prev}<li>${this.intl.t(`serverErrors.${e.code}`, {
-                            meta: e.meta,
-                            defaultMessage: (e.message && e.message.detail) || e.detail
-                        })}</li>`,
+                        `${prev}<li>${this.intl.t(
+                            `serverErrors.${e.meta?.entity ? `${e.meta.entity}.` : ''}${e.code}`,
+                            {
+                                meta: e.meta,
+                                defaultMessage: (e.message && e.message.detail) || e.detail
+                            }
+                        )}</li>`,
                     ''
                 )}
             </ul>

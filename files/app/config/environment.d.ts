@@ -21,5 +21,7 @@ declare const config: {
     pageTitle: {
         prepend: boolean;
     };
+    clientId: string;
+    clientSecret: string;
     APP: Record<string, unknown>;
 };

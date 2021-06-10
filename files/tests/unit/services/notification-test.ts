@@ -21,7 +21,7 @@ module('Unit | Service | notification', function (hooks) {
                 }
             ]
         });
-        assert.equal(service.content[0].message, 't:serverErrors.test:("meta":())');
+        assert.equal(service.content[0].message, 't:serverErrors.testing.test:("meta":())');
     });
 
     test('Errors returns unexpected error if nothing passed in', function (assert) {
@@ -53,7 +53,7 @@ module('Unit | Service | notification', function (hooks) {
             `<div>
         <p>The following errors occurred while attempting to process your request.</p>
         <ul>
-            <li>t:serverErrors.test:(\"meta\":())</li><li>t:serverErrors.test1:(\"meta\":())</li>
+            <li>t:serverErrors.testing.test:(\"meta\":())</li><li>t:serverErrors.testing1.test1:(\"meta\":())</li>
         </ul>
     </div>`.replace(/\s+/g, '')
         );
