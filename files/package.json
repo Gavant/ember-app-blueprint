@@ -138,7 +138,8 @@
     },
     "fastbootDependencies": [
         "node-fetch",
-        "moment"
+        "moment",
+        "buffer"
     ],
     "volta": {
         "node": "12.19.0"
