@@ -4,23 +4,36 @@ import { assign } from '@ember/polyfills';
 import { cancel, later } from '@ember/runloop';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
+import { cached } from '@glimmer/tracking';
 
 import Oauth2PasswordGrantAuthenticator from 'ember-simple-auth/authenticators/oauth2-password-grant';
 import { SessionAuthenticatedData } from 'ember-simple-auth/services/session';
 import isFastBoot from 'ember-simple-auth/utils/is-fastboot';
 
-import { ServerErrorPayload } from '<%= modulePrefix %>';
 import ENV from '<%= modulePrefix %>/config/environment';
 import AjaxService from '<%= modulePrefix %>/services/ajax';
+import { fastbootSafeBtoa } from '<%= modulePrefix %>/utils/encoding';
 
 export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthenticator {
     @service declare ajax: AjaxService;
 
     serverTokenEndpoint = `${ENV.apiBaseUrl}/oauth2/token`;
     serverTokenRevocationEndpoint = `${ENV.apiBaseUrl}/oauth2/logout`;
+    serverTokenRefreshEndpoint = `${ENV.apiBaseUrl}/oauth2/refresh`;
+
+    @cached
+    get serverBasicAuthorization() {
+        return `Basic ${fastbootSafeBtoa(`${ENV.clientId}:${ENV.clientSecret}`)}`;
+    }
+
+    get headers() {
+        const headers = {} as { Authorization?: string };
+        headers['Authorization'] = this.serverBasicAuthorization;
+        return headers;
+    }
 
     /**
-     * Authenticates the user session using a OAuth2 "Password Grant"-like flow via Cognito
+     * Authenticates the user session using a OAuth2 Password Grant flow
      *
      * @param {String} username
      * @param {String} password
@@ -30,7 +43,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
         username: string,
         password: string,
         scope: string[] | string = [],
-        headers = {}
+        headers: { Authorization?: string } = this.headers
     ): Promise<SessionAuthenticatedData> {
         const data: {
             grant_type: string;
@@ -55,20 +68,25 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
             )) as SessionAuthenticatedData;
 
             if (!this._validate(response)) {
-                throw new Error('id_token is missing in server response');
+                throw new Error('access_token is missing in server response');
             }
 
             // schedule a token refresh based on the token's expiration time
             // @see https://github.com/simplabs/ember-simple-auth/blob/3.0.0/addon/authenticators/oauth2-password-grant.js#L228
             const expiresAt = this._absolutizeExpirationTime(response.expires_in);
-            this._scheduleAccessTokenRefresh(response.expires_in, expiresAt, response.refresh_token, response.id_token);
+            this._scheduleAccessTokenRefresh(
+                response.expires_in,
+                expiresAt,
+                response.refresh_token,
+                response.access_token
+            );
             if (!isEmpty(expiresAt)) {
                 response = assign(response, { expires_at: expiresAt });
             }
 
             return response;
         } catch (err) {
-            const response = err.responseJSON as ServerErrorPayload;
+            const response = err.responseJSON as ApiServerErrorResponse;
             throw response;
         }
     }
@@ -83,16 +101,25 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
         const refreshAccessTokens = this.refreshAccessTokens;
         if (!isEmpty(data.expires_at) && data.expires_at < now) {
             if (refreshAccessTokens) {
-                const result = await this._refreshAccessToken(data.expires_in, data.refresh_token, data.id_token);
-                return result;
+                try {
+                    const result = await this._refreshAccessToken(data.expires_in, data.refresh_token);
+                    return result;
+                } catch (err) {
+                    throw err;
+                }
             } else {
-                throw new Error('id_token refresh is not enabled');
+                throw new Error('access_token refresh is not enabled');
             }
         } else {
             if (!this._validate(data)) {
-                throw new Error('id_token is missing in data');
+                throw new Error('access_token is missing in data');
             } else {
-                this._scheduleAccessTokenRefresh(data.expires_in, data.expires_at, data.refresh_token, data.id_token);
+                this._scheduleAccessTokenRefresh(
+                    data.expires_in,
+                    data.expires_at,
+                    data.refresh_token,
+                    data.access_token
+                );
                 return data;
             }
         }
@@ -106,8 +133,8 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      */
     async invalidate(data: SessionAuthenticatedData) {
         if (this.serverTokenRevocationEndpoint) {
-            const { id_token, refresh_token } = data;
-            await this.makeRequest(this.serverTokenRevocationEndpoint, { id_token, refresh_token });
+            const { access_token } = data;
+            await this.makeRequest(this.serverTokenRevocationEndpoint, { token: access_token }, this.headers);
             cancel(this._refreshTokenTimeout);
             delete this._refreshTokenTimeout;
         }
@@ -120,15 +147,18 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      * @param {string} refreshToken
      * @param {string} idToken
      */
-    async _refreshAccessToken(expiresIn: number, refreshToken: string, idToken: string) {
+    async _refreshAccessToken(expiresIn: number, refreshToken: string) {
         try {
             const body = {
                 grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-                id_token: idToken
+                refresh_token: refreshToken
             };
 
-            const response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
+            let response = (await this.makeRequest(
+                this.serverTokenRefreshEndpoint,
+                body,
+                this.headers
+            )) as SessionAuthenticatedData;
 
             expiresIn = response.expires_in || expiresIn;
             refreshToken = response.refresh_token || refreshToken;
@@ -140,11 +170,11 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                 refresh_token: refreshToken
             });
 
-            this._scheduleAccessTokenRefresh(expiresIn, null, refreshToken, response.id_token);
+            this._scheduleAccessTokenRefresh(expiresIn, null, refreshToken, response.access_token);
             this.trigger('sessionDataUpdated', data);
             return data;
         } catch (err) {
-            warn(`ID token could not be refreshed - server responded with ${err.responseJSON}.`, false, {
+            warn(`Access token could not be refreshed - server responded with ${err.responseJSON}.`, false, {
                 id: 'ember-simple-auth.failedOAuth2TokenRefresh'
             });
             throw err;
@@ -159,7 +189,12 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      * @param {string} refreshToken
      * @param {string} idToken
      */
-    _scheduleAccessTokenRefresh(expiresIn: number, expiresAt: number | null, refreshToken: string, idToken: string) {
+    _scheduleAccessTokenRefresh(
+        expiresIn: number,
+        expiresAt: number | null,
+        refreshToken: string,
+        accessToken: string
+    ) {
         const refreshAccessTokens = this.refreshAccessTokens && !isFastBoot(getOwner(this));
         if (refreshAccessTokens) {
             const now = new Date().getTime();
@@ -175,7 +210,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
                     this._refreshAccessToken,
                     expiresIn,
                     refreshToken,
-                    idToken,
+                    accessToken,
                     expiresAt - now - offset
                 );
             }
@@ -188,6 +223,6 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      * @param {AuthenticatedSessionData} data
      */
     _validate(data: SessionAuthenticatedData) {
-        return !isEmpty(data.id_token);
+        return !isEmpty(data.access_token);
     }
 }

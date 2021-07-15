@@ -24,8 +24,8 @@ export default class Application extends Adapter.extend(DataAdapterMixin, Fastbo
     get headers() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
-            const { id_token } = this.session.data!.authenticated;
-            headers['Authorization'] = `Bearer ${id_token}`;
+            const { access_token } = this.session.data!.authenticated;
+            headers['Authorization'] = `Bearer ${access_token}`;
         }
 
         return headers;

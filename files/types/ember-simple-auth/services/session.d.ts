@@ -6,11 +6,11 @@ import Service from '@ember/service';
 import User from '<%= modulePrefix %>/pods/user/model';
 
         interface SessionAuthenticatedData {
-        id: string;
-        id_token: string;
+        access_token: string;
         refresh_token: string;
         expires_in: number;
         expires_at: number;
+        token_type: string;
     }
 
     interface SessionData {
