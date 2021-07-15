@@ -19,6 +19,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
 
     serverTokenEndpoint = `${ENV.apiBaseUrl}/oauth2/token`;
     serverTokenRevocationEndpoint = `${ENV.apiBaseUrl}/oauth2/logout`;
+    serverTokenRefreshEndpoint = `${ENV.apiBaseUrl}/oauth2/refresh`;
 
     @cached
     get serverBasicAuthorization() {
@@ -26,7 +27,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
     }
 
     get headers() {
-        const headers = {} as any;
+        const headers = {} as { Authorization?: string };
         headers['Authorization'] = this.serverBasicAuthorization;
         return headers;
     }
@@ -38,7 +39,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      * @param {String} password
      * @returns Promise<AuthenticatedSessionData>
      */
-     async authenticate(
+    async authenticate(
         username: string,
         password: string,
         scope: string[] | string = [],
@@ -101,11 +102,7 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
         if (!isEmpty(data.expires_at) && data.expires_at < now) {
             if (refreshAccessTokens) {
                 try {
-                    const result = await this._refreshAccessToken(
-                        data.expires_in,
-                        data.refresh_token,
-                        data.access_token
-                    );
+                    const result = await this._refreshAccessToken(data.expires_in, data.refresh_token);
                     return result;
                 } catch (err) {
                     throw err;
@@ -150,15 +147,18 @@ export default class Oauth2GavantAuthenticator extends Oauth2PasswordGrantAuthen
      * @param {string} refreshToken
      * @param {string} idToken
      */
-    async _refreshAccessToken(expiresIn: number, refreshToken: string, accessToken: string) {
+    async _refreshAccessToken(expiresIn: number, refreshToken: string) {
         try {
             const body = {
                 grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-                access_token: accessToken
+                refresh_token: refreshToken
             };
 
-            let response = (await this.makeRequest(this.serverTokenEndpoint, body)) as SessionAuthenticatedData;
+            let response = (await this.makeRequest(
+                this.serverTokenRefreshEndpoint,
+                body,
+                this.headers
+            )) as SessionAuthenticatedData;
 
             expiresIn = response.expires_in || expiresIn;
             refreshToken = response.refresh_token || refreshToken;
