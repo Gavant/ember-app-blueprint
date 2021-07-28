@@ -1,7 +1,8 @@
 /* eslint-disable no-useless-escape */
 import { setupIntl } from 'ember-intl/test-support';
 import { setupTest } from 'ember-qunit';
-import Notification from 'quadran-micro-service/services/notification';
+
+import Notification from '<%= modulePrefix %>/services/notification';
 import { module, test } from 'qunit';
 
 module('Unit | Service | notification', function (hooks) {
