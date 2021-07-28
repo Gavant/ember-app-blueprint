@@ -11,43 +11,49 @@ module('Unit | Service | notification', function (hooks) {
 
     test('Errors with code works', function (assert) {
         const service: Notification = this.owner.lookup('service:notification');
-        service.errors({
-            errors: [
-                {
-                    code: 'test',
-                    meta: {
-                        entity: 'testing'
+        service.errors(
+            {
+                errors: [
+                    {
+                        code: 'test',
+                        meta: {
+                            entity: 'testing'
+                        }
                     }
-                }
-            ]
-        });
+                ]
+            },
+            { clearDuration: 0 }
+        );
         assert.equal(service.content[0].message, 't:serverErrors.test:("meta":())');
     });
 
     test('Errors returns unexpected error if nothing passed in', function (assert) {
         const service: Notification = this.owner.lookup('service:notification');
-        service.errors();
+        service.errors(undefined, { clearDuration: 0 });
         assert.equal(service.content[0].message, 'Sorry, an unexpected error has occurred.');
     });
 
     test('Group Errors works', function (assert) {
         const service: Notification = this.owner.lookup('service:notification');
-        service.groupErrors({
-            errors: [
-                {
-                    code: 'test',
-                    meta: {
-                        entity: 'testing'
+        service.groupErrors(
+            {
+                errors: [
+                    {
+                        code: 'test',
+                        meta: {
+                            entity: 'testing'
+                        }
+                    },
+                    {
+                        code: 'test1',
+                        meta: {
+                            entity: 'testing1'
+                        }
                     }
-                },
-                {
-                    code: 'test1',
-                    meta: {
-                        entity: 'testing1'
-                    }
-                }
-            ]
-        });
+                ]
+            },
+            { clearDuration: 0 }
+        );
         assert.equal(
             service.content[0].message.replace(/\s+/g, ''),
             `<div>
