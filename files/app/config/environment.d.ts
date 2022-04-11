@@ -11,7 +11,7 @@ declare const config: {
     environment: any;
     modulePrefix: string;
     podModulePrefix: string;
-    locationType: string;
+    locationType: 'history' | 'hash' | 'none' | 'auto';
     rootURL: string;
     routerRootURL: string;
     apiBaseUrl: string;
