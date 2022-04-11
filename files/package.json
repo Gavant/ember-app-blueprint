@@ -125,7 +125,8 @@
         "webpack": "^5.72.0"
     },
     "resolutions": {
-        "@embroider/macros": "^1.6.0"
+        "@embroider/macros": "^1.6.0",
+        "babel-import-util": "1.1.0"
     },
     "engines": {
         "node": "14.* || >= 16"
