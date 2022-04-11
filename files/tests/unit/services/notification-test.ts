@@ -10,7 +10,7 @@ module('Unit | Service | notification', function (hooks) {
     setupIntl(hooks);
 
     test('Errors with code works', function (assert) {
-        const service: Notification = this.owner.lookup('service:notification');
+        const service = this.owner.lookup('service:notification') as Notification;
         service.errors(
             {
                 errors: [
@@ -28,13 +28,13 @@ module('Unit | Service | notification', function (hooks) {
     });
 
     test('Errors returns unexpected error if nothing passed in', function (assert) {
-        const service: Notification = this.owner.lookup('service:notification');
+        const service = this.owner.lookup('service:notification') as Notification;
         service.errors(undefined, { clearDuration: 0 });
         assert.equal(service.content[0].message, 'Sorry, an unexpected error has occurred.');
     });
 
     test('Group Errors works', function (assert) {
-        const service: Notification = this.owner.lookup('service:notification');
+        const service = this.owner.lookup('service:notification') as Notification;
         service.groupErrors(
             {
                 errors: [

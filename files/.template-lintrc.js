@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    extends: ['octane', '@gavant/ember-template-lint-forms:forms'],
+    extends: ['recommended', '@gavant/ember-template-lint-forms:forms'],
     plugins: ['@gavant/ember-template-lint-forms'],
     rules: {
         'self-closing-void-elements': false,

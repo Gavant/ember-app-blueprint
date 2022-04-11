@@ -15,7 +15,7 @@ module('Unit | Service | ajax', function (hooks) {
     });
 
     test('Authorization headers when not authenticated', function (assert) {
-        const service: AjaxService = this.owner.lookup('service:ajax');
+        const service = this.owner.lookup('service:ajax') as AjaxService;
         assert.deepEqual(service.authorizationHeaders, {});
     });
 
@@ -27,7 +27,7 @@ module('Unit | Service | ajax', function (hooks) {
             expires_in: 123,
             expires_at: 123
         });
-        const service: AjaxService = this.owner.lookup('service:ajax');
+        const service = this.owner.lookup('service:ajax') as AjaxService;
         assert.deepEqual(service.authorizationHeaders, {
             Authorization: 'Bearer asdf'
         });

@@ -8,7 +8,7 @@ module.exports = function (environment) {
         //@see https://blog.emberjs.com/2016/04/28/baseurl ("Configuring the Router" section)
         rootURL: '/',
         routerRootURL: process.env.ROOT_URL,
-        locationType: 'auto',
+        locationType: 'history',
         EmberENV: {
             LOG_STACKTRACE_ON_DEPRECATION: false,
             FEATURES: {
@@ -53,7 +53,7 @@ module.exports = function (environment) {
         },
 
         fastboot: {
-            hostWhitelist: [new RegExp(process.env.FASTBOOT_WHITELIST_DOMAIN), /^localhost:\d+$/]
+            hostWhitelist: [new RegExp(process.env.FASTBOOT_WHITELIST_DOMAIN).toString(), /^localhost:\d+$/]
         },
 
         //deployment environment-specific variables
