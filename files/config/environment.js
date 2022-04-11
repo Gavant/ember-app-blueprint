@@ -53,7 +53,7 @@ module.exports = function (environment) {
         },
 
         fastboot: {
-            hostWhitelist: [new RegExp(process.env.FASTBOOT_WHITELIST_DOMAIN), /^localhost:\d+$/]
+            hostWhitelist: [new RegExp(process.env.FASTBOOT_WHITELIST_DOMAIN).toString(), /^localhost:\d+$/]
         },
 
         //deployment environment-specific variables
