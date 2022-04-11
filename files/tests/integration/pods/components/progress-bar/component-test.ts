@@ -3,6 +3,7 @@ import { render } from '@ember/test-helpers';
 
 import { setupRenderingTest } from 'ember-qunit';
 
+import LoadingBar from '<%= modulePrefix %>/services/loading-bar';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
 
@@ -23,7 +24,7 @@ module('Integration | Component | progress-bar', function (hooks) {
     });
 
     test('Visible if isShown is true', async function (assert) {
-        const loadingBar = this.owner.lookup('service:loading-bar');
+        const loadingBar = this.owner.lookup('service:loading-bar') as LoadingBar;
         loadingBar.isShown = true;
         await render(hbs`<ProgressBar/>`);
 

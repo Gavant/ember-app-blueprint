@@ -7,7 +7,7 @@ module('Unit | Service | loading-bar', function (hooks) {
     setupTest(hooks);
 
     test('Show/Hide work', function (assert) {
-        const service: LoadingBar = this.owner.lookup('service:loading-bar');
+        const service = this.owner.lookup('service:loading-bar') as LoadingBar;
 
         service.show();
         assert.equal(service.isShown, true);

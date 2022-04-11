@@ -6,13 +6,11 @@ import SessionService from 'ember-simple-auth/services/session';
 
 import createChangeset, { GenericChangeset } from '@gavant/ember-validations/utilities/create-changeset';
 
-// eslint-disable-next-line ember/no-mixins
-import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
 import LoginController from '<%= modulePrefix %>/pods/login/controller';
 import { LOGIN_VALIDATIONS } from '<%= modulePrefix %>/validations/login';
 
 export type LoginChangeset = GenericChangeset<{ emailAddress?: string; password?: string }>;
-export default class Login extends PageLayout(Route) {
+export default class Login extends Route {
     @service declare session: SessionService;
     classNames = ['unauthenticated login'];
     routeIfAlreadyAuthenticated = 'landing-route-here';

@@ -10,7 +10,7 @@ module('Unit | Service | current-user', function (hooks) {
 
     test('Loading the current user works', async function (assert) {
         this.server.create('user', { id: '1', firstName: 'Emma', lastName: 'Baker' });
-        const service: CurrentUserService = this.owner.lookup('service:current-user');
+        const service = this.owner.lookup('service:current-user') as CurrentUserService;
         await service.load();
         assert.ok(service.user);
     });

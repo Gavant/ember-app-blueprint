@@ -1,6 +1,5 @@
 import { assign } from '@ember/polyfills';
 import Service, { inject as service } from '@ember/service';
-import { cached } from '@glimmer/tracking';
 
 import SessionService from 'ember-simple-auth/services/session';
 
@@ -15,7 +14,6 @@ export default class AjaxService extends Service {
      * Add the oauth token authorization header to all requests
      * @return {Object}
      */
-    @cached
     get authorizationHeaders() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
@@ -29,7 +27,6 @@ export default class AjaxService extends Service {
      * The default headers on all requests
      * @return {Object}
      */
-    @cached
     get headers() {
         const headers = assign({ 'Content-Type': 'application/vnd.api+json' }, this.authorizationHeaders);
         return headers;
