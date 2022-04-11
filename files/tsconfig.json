@@ -25,11 +25,7 @@
             "<%= modulePrefix %>/tests/*": ["tests/*"],
             "<%= modulePrefix %>/*": ["app/*"],
             "*": ["types/*"],
-            "fetch": ["node_modules/ember-fetch"],
-            "@glimmer/tracking": [
-                "node_modules/ember-cached-decorator-polyfill",
-                "node_modules/@glimmer/tracking/dist/types"
-              ]
+            "fetch": ["node_modules/ember-fetch"]
         }
     },
     "include": ["app/**/*", "tests/**/*", "types/**/*", "mirage/**/*"]

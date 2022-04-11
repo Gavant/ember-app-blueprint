@@ -5,15 +5,11 @@ import { inject as service } from '@ember/service';
 
 import FastbootService from 'ember-cli-fastboot/services/fastboot';
 import IntlService from 'ember-intl/services/intl';
-// eslint-disable-next-line ember/no-mixins
-import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import SessionService from 'ember-simple-auth/services/session';
 
-// eslint-disable-next-line ember/no-mixins
-import PageLayout from '<%= modulePrefix %>/mixins/page-layout';
 import CurrentUserService from '<%= modulePrefix %>/services/current-user';
 
-export default class Application extends PageLayout(Route.extend(ApplicationRouteMixin)) {
+export default class Application extends Route {
     routeAfterAuthentication = 'dashboard';
     @service declare currentUser: CurrentUserService;
     @service declare session: SessionService;

@@ -126,7 +126,7 @@
         "typescript": "^4.6.3"
     },
     "engines": {
-        "node": "12.* || 14.* || >= 16"
+        "node": "14.* || >= 16"
     },
     "ember": {
         "edition": "octane"
@@ -135,6 +135,6 @@
         "node-fetch"
     ],
     "volta": {
-        "node": "12.19.0"
+        "node": "14.19.1"
     }
 }
