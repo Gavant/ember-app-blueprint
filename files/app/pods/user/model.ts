@@ -14,6 +14,14 @@ export default class User extends Model {
     get fullName() {
         return `${this.firstName} ${this.lastName}`;
     }
+    get initials() {
+        if (this.firstName || this.lastName) {
+            return `${this.firstName.charAt(0).toUpperCase() ?? ''} ${this.lastName.charAt(0).toUpperCase() ?? ''}`;
+        } else {
+            return this.email.charAt(0).toUpperCase();
+        }
+    }
+
 }
 
 declare module 'ember-data/types/registries/model' {

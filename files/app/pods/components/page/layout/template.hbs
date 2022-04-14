@@ -1,0 +1,11 @@
+{{#if (or (has-block "default") @empty)}}
+    {{#in-element this.targetElement}}
+        {{#unless @empty}}
+            {{yield to="default"}}
+        {{/unless}}
+    {{/in-element}}
+{{else}}
+    <div id={{@id}} {{did-insert this.onTargetInsert}} ...attributes>
+        {{yield to="initial"}}
+    </div>
+{{/if}}

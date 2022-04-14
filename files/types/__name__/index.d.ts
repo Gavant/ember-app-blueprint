@@ -1,4 +1,5 @@
-import '@glint/environment-ember-loose/registry';
+import '@glint/environment-ember-loose';
+import '@glint/environment-ember-loose/native-integration';
 import Ember from 'ember';
 
 declare global {

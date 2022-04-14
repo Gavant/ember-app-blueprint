@@ -41,7 +41,7 @@ export default class Application extends Adapter.extend(DataAdapterMixin, Fastbo
      * @return {*}
      * @memberof Application
      */
-     handleResponse(
+    handleResponse(
         status: number,
         headers: Record<string, unknown>,
         payload: Record<string, unknown>,

@@ -24,17 +24,15 @@ export default class Login extends Route {
         this.session.prohibitAuthentication('index');
     }
 
-
     /**
      * Creates a POJO for the login form changeset
      *
      * @return {Object}
      */
-     model(): LoginChangeset {
+    model(): LoginChangeset {
         const changeset = createChangeset({}, LOGIN_VALIDATIONS);
         return changeset;
     }
-
 
     /**
      * Reset controller state when leaving the route

@@ -1,7 +1,19 @@
 {{page-title "Welcome"}}
 <div class="container py-4">
-    <h1>{{t "brand.slogan"}}</h1>
+    <Page::Sidebar>
+        <:initial>
+             <Page::Sidebar::Default />
+        </:initial>
+    </Page::Sidebar>
+    <Page::Header>
+        <:initial>
+            <Page::Header::Default />
+        </:initial>
+    </Page::Header>
     {{outlet}}
+
+
+
 </div>
 <ProgressBar />
 <NotificationContainer @position={{this.notificationPosition}} />
