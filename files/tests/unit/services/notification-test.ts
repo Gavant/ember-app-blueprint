@@ -24,13 +24,13 @@ module('Unit | Service | notification', function (hooks) {
             },
             { clearDuration: 0 }
         );
-        assert.equal(service.content[0].message, 't:serverErrors.test:("meta":())');
+        assert.strictEqual(service.content[0].message, 't:serverErrors.test:("meta":())');
     });
 
     test('Errors returns unexpected error if nothing passed in', function (assert) {
         const service = this.owner.lookup('service:notification') as Notification;
         service.errors(undefined, { clearDuration: 0 });
-        assert.equal(service.content[0].message, 'Sorry, an unexpected error has occurred.');
+        assert.strictEqual(service.content[0].message, 'Sorry, an unexpected error has occurred.');
     });
 
     test('Group Errors works', function (assert) {
@@ -54,7 +54,7 @@ module('Unit | Service | notification', function (hooks) {
             },
             { clearDuration: 0 }
         );
-        assert.equal(
+        assert.strictEqual(
             service.content[0].message.replace(/\s+/g, ''),
             `<div>
         <p>The following errors occurred while attempting to process your request.</p>
