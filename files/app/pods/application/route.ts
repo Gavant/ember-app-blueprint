@@ -18,6 +18,7 @@ export default class Application extends Route {
 
     async beforeModel(transition: Transition) {
         super.beforeModel(transition);
+        await this.session.setup();
         this.intl.setLocale('en-us');
         if (this.session.isAuthenticated) {
             try {

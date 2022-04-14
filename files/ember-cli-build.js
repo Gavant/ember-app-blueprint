@@ -6,6 +6,9 @@ module.exports = function (defaults) {
     let app = new EmberApp(defaults, {
         fingerprint: {
             prepend: process.env.ASSETS_BASE_URL
+        },
+        'ember-simple-auth': {
+            useSessionSetupMethod: true
         }
     });
 

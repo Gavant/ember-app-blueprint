@@ -1,11 +1,10 @@
 import { inject as service } from '@ember/service';
-
-import Component from '@glint/environment-ember-loose/glimmer-component';
+import Component from '@glimmer/component';
 
 import LoadingBar from '<%= modulePrefix %>/services/loading-bar';
 
 interface ProgressBarArgs {
-    light: boolean;
+    light?: boolean;
 }
 
 export interface ProgressBarSignature {

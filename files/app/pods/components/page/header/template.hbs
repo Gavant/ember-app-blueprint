@@ -1,0 +1,16 @@
+{{#if (has-block "default")}}
+    <Page::Layout @id={{this.id}} @document={{this.document}} @empty={{this.empty}}>
+        <:default>
+            {{yield}}
+        </:default>
+        <:initial>
+            {{yield to="initial"}}
+        </:initial>
+    </Page::Layout>
+{{else}}
+    <Page::Layout @id={{this.id}} @document={{this.document}} @empty={{this.empty}}>
+        <:initial>
+            {{yield to="initial"}}
+        </:initial>
+    </Page::Layout>
+{{/if}}

@@ -64,6 +64,6 @@ import User from '<%= modulePrefix %>/pods/user/model';
         prohibitAuthentication(routeOrCallback: string | (() => void)): boolean;
         handleAuthentication(routeAfterAuth: string): void;
         handleInvalidation(routeAfterInvalid: string): void;
-
+        setup: () => Promise<void>;
     }
 }
