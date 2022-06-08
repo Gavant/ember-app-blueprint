@@ -31,7 +31,7 @@ export default class LoginController extends Controller {
         try {
             this.loadingBar.show();
             this.session.set('isAuthenticating', true);
-            const response = await this.session.authenticate('authenticator:oauth2-gavant', username, password);
+            const response = await this.session.authenticate('authenticator:cognito-graphql', username, password);
             return response;
         } catch (err) {
             const response = err as ServerErrorPayload;

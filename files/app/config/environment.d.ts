@@ -14,12 +14,31 @@ declare const config: {
     locationType: 'history' | 'hash' | 'none' | 'auto';
     rootURL: string;
     routerRootURL: string;
-    apiBaseUrl: string;
+    APP: {
+        VERSION?: string;
+        LOG_RESOLVER?: boolean;
+        LOG_ACTIVE_GENERATION?: boolean;
+        LOG_TRANSITIONS?: boolean;
+        LOG_TRANSITIONS_INTERNAL?: boolean;
+        LOG_VIEW_LOOKUPS?: boolean;
+        rootElement?: string;
+        autoboot?: boolean;
+    };
     fastboot: {
         hostWhitelist: Array<string | RegExp>;
     };
     pageTitle: {
         prepend: boolean;
     };
-    APP: Record<string, unknown>;
+    graphql?: {
+        uri: string;
+        ssrForceFetchDelay?: number;
+    };
+    'ember-simple-auth': {
+        useSessionSetupMethod: boolean;
+        routeAfterAuthentication: string;
+    };
+    'ember-cli-mirage': {
+        enabled: boolean;
+    };
 };

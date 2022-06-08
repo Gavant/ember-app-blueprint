@@ -8,6 +8,8 @@ import SessionService from 'ember-simple-auth/services/session';
 import User from '<%= modulePrefix %>/pods/user/model';
 import { reject } from 'rsvp';
 
+// TODO update this file w/the graphql version once it is completed/ember-graphql addon is finished
+
 export default class CurrentUserService extends Service {
     @service declare store: DS.Store;
     @service declare session: SessionService;

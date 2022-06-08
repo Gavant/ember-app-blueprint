@@ -44,6 +44,7 @@ module.exports = {
 
         //move the .env-* files into the ember app's parent directory (i.e. the repo root dir)
         await mv(path.join(projRoot, '.env-development'), path.join(projRoot, '..', '.env-development'));
+        await mv(path.join(projRoot, '.env-test'), path.join(projRoot, '..', '.env-test'));
         await mv(path.join(projRoot, '.env-candidate'), path.join(projRoot, '..', '.env-candidate'));
         await mv(path.join(projRoot, '.env-production'), path.join(projRoot, '..', '.env-production'));
 

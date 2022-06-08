@@ -1,16 +1,13 @@
 declare module 'ember-simple-auth/services/session' {
-import Evented from '@ember/object/evented';
-import Transition from '@ember/routing/-private/transition';
-import Service from '@ember/service';
+    import Evented from '@ember/object/evented';
+    import Transition from '@ember/routing/-private/transition';
+    import Service from '@ember/service';
 
-import User from '<%= modulePrefix %>/pods/user/model';
-
-        interface SessionAuthenticatedData {
-        id: string;
-        id_token: string;
+    interface SessionAuthenticatedData {
+        access_token: string;
         refresh_token: string;
         expires_in: number;
-        expires_at: number;
+        expires_at: number | null;
     }
 
     interface SessionData {
@@ -54,7 +51,6 @@ import User from '<%= modulePrefix %>/pods/user/model';
         store: any;
         attemptedTransition: any;
         session: any;
-        user: User;
 
         set<K extends keyof this>(key: K, value: this[K]): this[K];
         authenticate(...args: any[]): PromiseLike<SessionAuthenticatedData>;
@@ -64,6 +60,6 @@ import User from '<%= modulePrefix %>/pods/user/model';
         prohibitAuthentication(routeOrCallback: string | (() => void)): boolean;
         handleAuthentication(routeAfterAuth: string): void;
         handleInvalidation(routeAfterInvalid: string): void;
-        setup: () => Promise<void>;
+        setup(): Promise<SessionAuthenticatedData>;
     }
 }

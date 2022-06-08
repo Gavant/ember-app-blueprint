@@ -9,6 +9,8 @@ import { ResetPasswordChangeset } from '<%= modulePrefix %>/pods/password/reset/
 import AjaxService from '<%= modulePrefix %>/services/ajax';
 import Notification from '<%= modulePrefix %>/services/notification';
 
+// TODO update this once we have graphql password reset finished
+
 export default class PasswordResetController extends Controller {
     @service declare intl: IntlService;
     @service declare notification: Notification;

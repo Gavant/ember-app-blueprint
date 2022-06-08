@@ -10,7 +10,6 @@ import SessionService from 'ember-simple-auth/services/session';
 import CurrentUserService from '<%= modulePrefix %>/services/current-user';
 
 export default class Application extends Route {
-    routeAfterAuthentication = 'dashboard';
     @service declare currentUser: CurrentUserService;
     @service declare session: SessionService;
     @service declare intl: IntlService;
@@ -29,26 +28,13 @@ export default class Application extends Route {
         }
     }
 
-    async sessionAuthenticated() {
-        try {
-            //get the current user's model before transitioning from the login page
-            const currentUser = await this.currentUser.load();
-            //@ts-ignore TODO we need a way to inform TS about class members coming from Ember-style mixins
-            super.sessionAuthenticated(...arguments);
-            return currentUser;
-        } catch (err) {
-            //handle failures of fetching the current user here (e.g. display error notification toast, etc)
-            //since current user fetch failed, the user should probably not stay logged in
-            this.session.invalidate();
-            throw err;
-        }
-    }
-
     @action
     error(error?: any) {
         if (this.fastboot.isFastBoot) {
             this.fastboot.response.statusCode = error?.errors?.firstObject?.status ?? 200;
         }
+
+        // TODO update this to handle graphql/apollo errors instead of ember data
         if (error?.errors?.length > 0) {
             const status = error.errors.firstObject.status;
             if (status === '403') {

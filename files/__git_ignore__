@@ -3,6 +3,11 @@
 # compiled output
 /dist/
 /tmp/
+/types/graphql.generated.d.ts
+/app/types/graphql.generated.ts
+/app/graphql/schema/schema.graphql
+/app/graphql/schema/schema.local.graphql
+/app/graphql/schema/schema.graphql.json
 
 # dependencies
 /bower_components/

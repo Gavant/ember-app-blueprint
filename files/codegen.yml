@@ -1,0 +1,32 @@
+overwrite: true
+hooks:
+    afterAllFileWrite:
+        - ./node_modules/.bin/prettier --write
+schema:
+    # NOTE: set a SCHEMA_PATH env variable to override the default here
+    - ${SCHEMA_PATH:'https://<%= name %>.s3.amazonaws.com/schema.graphql'}
+    # NOTE: you can add this file locally (it will be ignored by git) to make additions/changes to the schema
+    # The changes will override/merge with the schema loaded above. This allows you to create new types/queries
+    # before they exist in the real API, for use w/MirageJS mocking, for example
+    - app/graphql/schema/schema.local.graphql
+documents: 'app/graphql/**/*.ts'
+generates:
+    # NOTE: generates a .graphql document for the full GraphQL schema (including any merged local schemas)
+    app/graphql/schema/schema.graphql:
+        plugins:
+            - schema-ast
+    # NOTE: generates the TypeScript type definitions for the GraphQL schema and the FE-defined queries/mutations
+    app/types/graphql.generated.ts:
+        plugins:
+            - 'typescript'
+            - 'typescript-operations'
+    # NOT CURRENTLY IN USE
+    # NOTE: generates the Typescript module definitions for .graphql document files
+    # types/graphql.generated.d.ts:
+    #     plugins:
+    #         - 'typescript-graphql-files-modules'
+    # NOT CURRENTLY IN USE
+    # NOTE: generates a graphql schema introspection JSON document
+    # app/graphql/schema.graphql.json:
+    #     plugins:
+    #         - 'introspection'

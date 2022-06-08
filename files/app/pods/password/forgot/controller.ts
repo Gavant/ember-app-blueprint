@@ -9,6 +9,8 @@ import AjaxService from '<%= modulePrefix %>/services/ajax';
 import Notification from '<%= modulePrefix %>/services/notification';
 import { RouteModel } from '<%= modulePrefix %>/utils/typescript';
 
+// TODO update this once we have graphql password reset finished
+
 export default class ForgotPasswordController extends Controller {
     @service declare notification: Notification;
     @service declare ajax: AjaxService;

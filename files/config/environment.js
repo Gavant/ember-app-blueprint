@@ -24,6 +24,7 @@ module.exports = function (environment) {
         APP: {
             // Here you can pass flags/options to your application instance
             // when it is created
+            VERSION: 'BUILD_VERSION',
         },
 
         fontawesome: {
@@ -56,8 +57,19 @@ module.exports = function (environment) {
             hostWhitelist: [new RegExp(process.env.FASTBOOT_WHITELIST_DOMAIN).toString(), /^localhost:\d+$/.toString()]
         },
 
-        //deployment environment-specific variables
-        apiBaseUrl: process.env.API_BASE_URL
+        'ember-simple-auth': {
+            useSessionSetupMethod: true,
+            routeAfterAuthentication: 'dashboard',
+        },
+
+        'ember-cli-mirage': {
+            enabled: false,
+        },
+
+        graphql: {
+            uri: process.env.GRAPHQL_URI,
+            ssrForceFetchDelay: 100,
+        },
     };
 
     if (environment === 'development') {
@@ -66,6 +78,8 @@ module.exports = function (environment) {
         // ENV.APP.LOG_TRANSITIONS = true;
         // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
         // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+        ENV['ember-cli-mirage'].enabled = false;
     }
 
     if (environment === 'test') {
