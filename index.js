@@ -11,7 +11,9 @@ const mergedirs = require('merge-dirs').default;
 const deleteDirRecursive = require('./lib/utilities/delete-dir-recursive');
 const prependEmoji = require('./lib/utilities/prepend-emoji');
 
-const supportedBackends = ['json-api', 'graphql'];
+const SUPPORTED_BACKENDS = ['json-api', 'graphql'];
+const COMMON_DIR = '__common__';
+const PROJECT_TYPES_DIR = '__project-types__';
 
 module.exports = {
   description: 'The Gavant blueprint for ember-cli projects.',
@@ -47,11 +49,11 @@ module.exports = {
         const backendOption = this.options.backend || this.options.be; 
         const backend = backendOption && supportedBackends.includes(backendOption) ? backendOption : 'json-api';
 
-        mergedirs(path.join(projRoot, '__common__'), projRoot, 'overwrite');
-        mergedirs(path.join(projRoot, '__project-types__', backend), projRoot, 'overwrite');
+        mergedirs(path.join(projRoot, COMMON_DIR), projRoot, 'overwrite');
+        mergedirs(path.join(projRoot, PROJECT_TYPES_DIR, backend), projRoot, 'overwrite');
 
-        deleteDirRecursive(path.join(projRoot, '__common__'));
-        supportedBackends.forEach(dir => deleteDirRecursive(path.join(projRoot, '__project-types__', dir)));
+        deleteDirRecursive(path.join(projRoot, COMMON_DIR));
+        deleteDirRecursive(path.join(projRoot, PROJECT_TYPES_DIR));
 
         //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
         await mv(path.join(projRoot, '__git_ignore__'), path.join(projRoot, '.gitignore'));
