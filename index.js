@@ -7,7 +7,7 @@ const util = require('util');
 const fs = require('fs');
 const mv = util.promisify(fs.rename);
 const prependEmoji = require('./lib/utilities/prepend-emoji');
-var mergedirs = require('merge-dirs');
+var mergedirs = require('merge-dirs').default;
 
 const supportedBackends = ['json-api', 'graphql'];
 
@@ -45,8 +45,8 @@ module.exports = {
         const backendOption = this.options.backend || this.options.be; 
         const backend = backendOption && supportedBackends.includes(backendOption) ? backendOption : 'json-api';
 
-        mergedirs(path.join(projRoot, '__common__'), projRoot, { overwrite: true });
-        mergedirs(path.join(projRoot, '__project-types__', backend), projRoot, { overwrite: true });
+        mergedirs(path.join(projRoot, '__common__'), projRoot, 'overwrite');
+        mergedirs(path.join(projRoot, '__project-types__', backend), projRoot, 'overwrite');
 
         fs.unlinkSync(path.join(projRoot, '__common__'));
         supportedBackends.forEach(dir => fs.unlinkSync(path.join(projRoot, '__project-types__', dir)));
