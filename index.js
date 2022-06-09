@@ -47,7 +47,7 @@ module.exports = {
         const projRoot = this.project.root;
 
         const backendOption = this.options.backend || this.options.be; 
-        const backend = backendOption && supportedBackends.includes(backendOption) ? backendOption : 'json-api';
+        const backend = backendOption && SUPPORTED_BACKENDS.includes(backendOption) ? backendOption : 'json-api';
 
         mergedirs(path.join(projRoot, COMMON_DIR), projRoot, 'overwrite');
         mergedirs(path.join(projRoot, PROJECT_TYPES_DIR, backend), projRoot, 'overwrite');
