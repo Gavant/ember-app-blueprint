@@ -6,8 +6,10 @@ const path = require('path');
 const util = require('util');
 const fs = require('fs');
 const mv = util.promisify(fs.rename);
+const mergedirs = require('merge-dirs').default;
+
+const deleteDirRecursive = require('./lib/utilities/delete-dir-recursive');
 const prependEmoji = require('./lib/utilities/prepend-emoji');
-var mergedirs = require('merge-dirs').default;
 
 const supportedBackends = ['json-api', 'graphql'];
 
@@ -48,8 +50,8 @@ module.exports = {
         mergedirs(path.join(projRoot, '__common__'), projRoot, 'overwrite');
         mergedirs(path.join(projRoot, '__project-types__', backend), projRoot, 'overwrite');
 
-        fs.unlinkSync(path.join(projRoot, '__common__'));
-        supportedBackends.forEach(dir => fs.unlinkSync(path.join(projRoot, '__project-types__', dir)));
+        deleteDirRecursive(path.join(projRoot, '__common__'));
+        supportedBackends.forEach(dir => deleteDirRecursive(path.join(projRoot, '__project-types__', dir)));
 
         //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
         await mv(path.join(projRoot, '__git_ignore__'), path.join(projRoot, '.gitignore'));
