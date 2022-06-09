@@ -7,6 +7,9 @@ const util = require('util');
 const fs = require('fs');
 const mv = util.promisify(fs.rename);
 const prependEmoji = require('./lib/utilities/prepend-emoji');
+var mergedirs = require('merge-dirs');
+
+const supportedBackends = ['json-api', 'graphql'];
 
 module.exports = {
   description: 'The Gavant blueprint for ember-cli projects.',
@@ -16,7 +19,6 @@ module.exports = {
         let rawName = entity.name;
         let name = stringUtil.dasherize(rawName);
         let namespace = stringUtil.classify(rawName);
-        console.log('BLUEPRINT OPTIONS!', options, rawName, name, namespace);
 
         return {
             name,
@@ -29,9 +31,6 @@ module.exports = {
     },
 
     beforeInstall() {
-        console.log('beforeInstall options!', this.options);
-        console.log('------------------------------------------------------');
-
         const version = require('./package').version;
         this.ui.writeLine(chalk.blue(`Gavant Ember App Blueprint v${version}`));
         this.ui.writeLine('');
@@ -43,16 +42,21 @@ module.exports = {
 
         const projRoot = this.project.root;
 
-        // TODO if the cli hasn't run yarn install yet, we could possibly move around/merge the file dirs here of the selected BE type and then delete the unused ones
-        console.log('afterInstall does node_modules exist?', fs.existsSync(path.join(projRoot, 'node_modules')));
-        console.log('afterInstall options!', this.options);
-        console.log('------------------------------------------------------');
+        const backendOption = this.options.backend || this.options.be; 
+        const backend = backendOption && supportedBackends.includes(backendOption) ? backendOption : 'json-api';
+
+        mergedirs(path.join(projRoot, '__common__'), projRoot, { overwrite: true });
+        mergedirs(path.join(projRoot, '__project-types__', backend), projRoot, { overwrite: true });
+
+        fs.unlinkSync(path.join(projRoot, '__common__'));
+        supportedBackends.forEach(dir => fs.unlinkSync(path.join(projRoot, '__project-types__', dir)));
 
         //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
         await mv(path.join(projRoot, '__git_ignore__'), path.join(projRoot, '.gitignore'));
 
         //move the .env-* files into the ember app's parent directory (i.e. the repo root dir)
         await mv(path.join(projRoot, '.env-development'), path.join(projRoot, '..', '.env-development'));
+        await mv(path.join(projRoot, '.env-test'), path.join(projRoot, '..', '.env-test'));
         await mv(path.join(projRoot, '.env-candidate'), path.join(projRoot, '..', '.env-candidate'));
         await mv(path.join(projRoot, '.env-production'), path.join(projRoot, '..', '.env-production'));
 
