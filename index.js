@@ -16,6 +16,7 @@ module.exports = {
         let rawName = entity.name;
         let name = stringUtil.dasherize(rawName);
         let namespace = stringUtil.classify(rawName);
+        console.log('BLUEPRINT OPTIONS!', JSON.stringify(options, undefined, 2), options, rawName, name, namespace);
 
         return {
             name,
@@ -24,10 +25,14 @@ module.exports = {
             emberCLIVersion: require('./package').version,
             yarn: options.yarn,
             blueprint: '@gavant/ember-app-blueprint',
+            backend: options.backend || options.be || 'json-api'
         };
     },
 
     beforeInstall() {
+        console.log('beforeInstall project!', JSON.stringify(this.project, undefined, 2));
+        console.log('------------------------------------------------------');
+        console.log('this context', JSON.stringify(this, undefined, 2));
         const version = require('./package').version;
         this.ui.writeLine(chalk.blue(`Gavant Ember App Blueprint v${version}`));
         this.ui.writeLine('');
@@ -38,6 +43,13 @@ module.exports = {
         await this._super.afterInstall.apply(this, arguments);
 
         const projRoot = this.project.root;
+
+        console.log('does node_modules exist?', fs.existsSync(path.join(projRoot, 'node_modules')));
+        console.log('afterInstall project!', JSON.stringify(this.project, undefined, 2));
+        console.log('------------------------------------------------------');
+        console.log('this context', JSON.stringify(this, undefined, 2));
+
+        // TODO if the cli hasn't run yarn install yet, we could possibly move around/merge the file dirs here of the selected BE type and then delete the unused ones
 
         //rename the gitignore file to the proper .gitignore (as npm otherwise strips .gitignore files in published artifacts)
         await mv(path.join(projRoot, '__git_ignore__'), path.join(projRoot, '.gitignore'));
