@@ -4,8 +4,18 @@ import { createGraphQLHandler } from '@miragejs/graphql';
 import ENV from '<%= modulePrefix %>/config/environment';
 import graphQLSchema from '<%= modulePrefix %>/graphql/schema/schema.graphql';
 
-const graphQLHandlerConfigs = {
+interface GraphQLHandlerConfigs {
+    [environment: string]: {
+        root: any;
+        context: any;
+        resolvers: any;
+    };
+}
+
+const graphQLHandlerConfigs: GraphQLHandlerConfigs = {
     all: {
+        root: undefined,
+        context: undefined,
         resolvers: {
             Query: {
                 // Add your GraphQL resolvers here to customize query logic and responses
@@ -20,9 +30,9 @@ const graphQLHandlerConfigs = {
                         return mirageGraphQLFieldResolver(obj, args, context, info);
                     },
                 */
-            },
-        },
-    },
+            }
+        }
+    }
 };
 
 function routes() {
@@ -46,15 +56,17 @@ function routes() {
 
     https://miragejs.com/docs/getting-started/overview/
   */
+    // @ts-ignore
+    const server = this as any;
     const handlerConfig = { ...graphQLHandlerConfigs.all, ...(graphQLHandlerConfigs[ENV.environment] ?? {}) };
-    const graphQlHandler = createGraphQLHandler(graphQLSchema, this.schema, handlerConfig);
-    this.post(ENV.graphql.uri, graphQlHandler);
+    const graphQlHandler = createGraphQLHandler(graphQLSchema, server.schema, handlerConfig);
+    server.post(ENV.graphql?.uri, graphQlHandler);
 }
 
-export default function (config) {
-    let finalConfig = {
+export default function (config: any) {
+    const finalConfig = {
         ...config,
-        routes,
+        routes
     };
 
     return createServer(finalConfig);

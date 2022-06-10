@@ -17,8 +17,8 @@ export default class AjaxService extends Service {
     get authorizationHeaders() {
         const headers = {} as any;
         if (this.session.isAuthenticated) {
-            const { id_token } = this.session.data!.authenticated;
-            headers['Authorization'] = `Bearer ${id_token}`;
+            const { access_token } = this.session.data!.authenticated;
+            headers['Authorization'] = `Bearer ${access_token}`;
         }
         return headers;
     }
