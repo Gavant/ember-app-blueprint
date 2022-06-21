@@ -4,14 +4,7 @@ import { isEmpty } from '@ember/utils';
 import NotificationService from 'ember-cli-notifications/services/notifications';
 import IntlService from 'ember-intl/services/intl';
 
-// TODO update this file w/the graphql version once error handling is completed
-interface ServerError {
-    // TODO
-}
-
-interface ServerErrorPayload {
-    // TODO
-} 
+import { ServerError, ServerErrorPayload } from '<%= modulePrefix %>';
 
 export default class Notifications extends NotificationService {
     @service declare intl: IntlService;
@@ -26,8 +19,7 @@ export default class Notifications extends NotificationService {
 
         errors.forEach((error) => {
             const message = this.intl.t(`serverErrors.${error.code}`, {
-                meta: error.meta,
-                defaultMessage: error.message?.detail || error.detail
+                defaultMessage: error.message
             });
             this.addNotification(
                 Object.assign(
@@ -61,7 +53,7 @@ export default class Notifications extends NotificationService {
                     (prev, e) =>
                         `${prev}<li>${this.intl.t(`serverErrors.${e.code}`, {
                             meta: e.meta,
-                            defaultMessage: (e.message && e.message.detail) || e.detail
+                            defaultMessage: e.message
                         })}</li>`,
                     ''
                 )}

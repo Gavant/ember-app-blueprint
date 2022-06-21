@@ -34,23 +34,6 @@ export default class Application extends Route {
             this.fastboot.response.statusCode = error?.errors?.firstObject?.status ?? 200;
         }
 
-        // TODO update this to handle graphql/apollo errors instead of ember data
-        if (error?.errors?.length > 0) {
-            const status = error.errors.firstObject.status;
-            if (status === '403') {
-                this.replaceWith('four-oh-three');
-                //marks error as being handled
-                return false;
-            } else if (status === '401') {
-                this.replaceWith('login');
-                //marks error as being handled
-                return false;
-            } else if (status === '404') {
-                this.replaceWith('four-oh-four', '404');
-                //marks error as being handled
-                return false;
-            }
-        }
         return true;
     }
 }
