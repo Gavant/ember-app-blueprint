@@ -7,15 +7,4 @@ declare global {
     // interface Function extends Ember.FunctionPrototypeExtensions {}
 }
 
-export interface ServerError {
-    code: string;
-    message: string;
-    path: string[];
-    locations: { line: number; column: number }[];
-}
-
-export interface ServerErrorPayload {
-    errors: ServerError[];
-}
-
 export {};

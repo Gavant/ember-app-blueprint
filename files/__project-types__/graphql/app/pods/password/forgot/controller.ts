@@ -3,20 +3,24 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 import IntlService from 'ember-intl/services/intl';
+import { useMutation } from 'glimmer-apollo';
 
+import { FORGOT_PASSWORD } from '<%= modulePrefix %>/graphql/mutations/auth';
+import { ForgotPasswordMutation, ForgotPasswordMutationVariables } from '<%= modulePrefix %>/types/graphql.generated';
 import PasswordForgotRoute, { ForgotPasswordChangeset } from '<%= modulePrefix %>/pods/password/forgot/route';
-import AjaxService from '<%= modulePrefix %>/services/ajax';
 import Notification from '<%= modulePrefix %>/services/notification';
 import { RouteModel } from '<%= modulePrefix %>/utils/typescript';
 
-// TODO update this once we have graphql password reset finished
-
 export default class ForgotPasswordController extends Controller {
     @service declare notification: Notification;
-    @service declare ajax: AjaxService;
     @service declare intl: IntlService;
 
     declare model: RouteModel<PasswordForgotRoute>;
+
+    forgotPasswordMutation = useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(this, () => [
+        FORGOT_PASSWORD,
+        {},
+    ]);
 
     /**
      * Submits password forgot form
@@ -28,10 +32,12 @@ export default class ForgotPasswordController extends Controller {
     async submit(changeset: ForgotPasswordChangeset) {
         try {
             const emailAddress = changeset.emailAddress;
-            const result = await this.ajax.request('/oauth2/initiate-forgot-password', {
-                method: 'POST',
-                body: JSON.stringify({ username: emailAddress })
-            });
+            const result = await this.forgotPasswordMutation.mutate({ username: emailAddress });
+
+            if (!result?.forgotPassword || this.forgotPasswordMutation.error) {
+                throw this.forgotPasswordMutation.error;
+            }
+
             this.notification.success(
                 this.intl.t('password.forgot.success', {
                     email: emailAddress
@@ -40,7 +46,7 @@ export default class ForgotPasswordController extends Controller {
 
             return result;
         } catch (err) {
-            this.notification.errors(err.payload);
+            this.notification.errors(err);
             throw err;
         }
     }
