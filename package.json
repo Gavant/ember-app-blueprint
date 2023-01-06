@@ -18,7 +18,8 @@
     "homepage": "https://github.com/Gavant/ember-app-blueprint",
     "dependencies": {
         "chalk": "^3.0.0",
-        "ember-cli-string-utils": "^1.1.0"
+        "ember-cli-string-utils": "^1.1.0",
+        "merge-dirs": "^0.2.1"
     },
     "ember-addon": {
         "main": "ember-addon-main.js"
